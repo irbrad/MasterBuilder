@@ -34,6 +34,7 @@ void ApplicationState_Running::Update()
             // I feel kind of bad about this Dynamic Cast chain, but whatever.
             if ( Load* msg = dynamic_cast< Load* >( result ) )
             {
+                delete msg;
             }
             else if ( RequestCPU* msg = dynamic_cast< RequestCPU* >( result ) )
             {
@@ -42,19 +43,27 @@ void ApplicationState_Running::Update()
                 if ( CitizenDB::instance->RequestCore( host, core ) )
                 {
                 }
+
+                delete msg;
             }
             else if ( ReleaseCPU* msg = dynamic_cast< ReleaseCPU* >( result ) )
             {
                 CitizenDB::instance->ReleaseCore( msg->host(), msg->core() );
+
+                delete msg;
             }
             else if ( Register* msg = dynamic_cast< Register* >( result ) )
             {
                 CitizenDB::instance->Register( msg->host(), msg->corecount(),
                                                msg->priority() );
+
+                delete msg;
             }
             else if ( Unregister* msg = dynamic_cast< Unregister* >( result ) )
             {
                 CitizenDB::instance->Release( msg->host() );
+
+                delete msg;
             }
         }
     }

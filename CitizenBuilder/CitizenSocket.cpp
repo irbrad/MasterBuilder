@@ -27,6 +27,23 @@
 
 CitizenSocket::CitizenSocket()
 {
+    HighPriorityQueue =
+        dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 );
+
+    InitializeSocket();
+}
+
+CitizenSocket::~CitizenSocket()
+{
+#if DEBUG
+    fprintf( stderr, "~CitizenSocket dtor\n" );
+#endif
+
+    shutdown( Socket, SHUT_RDWR );
+}
+
+void CitizenSocket::InitializeSocket()
+{
     Socket = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
     if ( Socket < 0 )
     {
@@ -65,15 +82,45 @@ CitizenSocket::CitizenSocket()
         close( Socket );
         return;
     }
-}
 
-CitizenSocket::~CitizenSocket()
-{
+    SocketSource = dispatch_source_create( DISPATCH_SOURCE_TYPE_READ, Socket, 0,
+                                           HighPriorityQueue );
+
+    dispatch_source_set_event_handler( SocketSource, ^{
+        int32_t temp_sock = -1;
+
+        struct sockaddr_in sin;
+        memset( &sin, 0, sizeof( sin ) );
+        sin.sin_family = AF_INET;
+        socklen_t len = sizeof( sin );
+
+        if ( ( temp_sock =
+                   accept( Socket, reinterpret_cast< struct sockaddr* >( &sin ),
+                           &len ) ) < 0 )
+        {
+            fprintf( stderr, "Accept failed (errno = %d)\n", errno );
+            return;
+        }
+
+        std::string host = inet_ntoa( sin.sin_addr );
+        
 #if DEBUG
-    fprintf( stderr, "~CitizenSocket dtor\n" );
+        fprintf( stderr, "Connecting IP Address = '%s'\n", host.c_str() );
 #endif
 
-    shutdown( Socket, SHUT_RDWR );
+        char buffer[ 4 ] = {0};
+        ssize_t bytecount = 0;
+
+        if ( ( bytecount = recv( temp_sock, buffer, 4, MSG_PEEK ) ) < 0 )
+        {
+            fprintf( stderr, "Error reading from socket (errno = %d)\n",
+                     errno );
+            return;
+        }
+
+    } );
+
+    dispatch_resume( SocketSource );
 }
 
 void CitizenSocket::SendMsg( google::protobuf::Message* msg, uint32_t msgType )
@@ -102,4 +149,6 @@ void CitizenSocket::SendMsg( google::protobuf::Message* msg, uint32_t msgType )
     {
         fprintf( stderr, "Failed to send packet (errno = %d)", errno );
     }
+
+    delete[] buffer;
 }

@@ -122,6 +122,23 @@ google::protobuf::Message* ParseMessage( int32_t Socket,
 
 MasterSocket::MasterSocket()
 {
+    HighPriorityQueue =
+        dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 );
+
+    InitializeSocket();
+    InitializeTick();
+}
+
+MasterSocket::~MasterSocket()
+{
+    close( Socket );
+
+    dispatch_source_cancel( SocketSource );
+    dispatch_source_cancel( TimerSource );
+}
+
+void MasterSocket::InitializeSocket()
+{
     Socket = socket( PF_INET, SOCK_STREAM, IPPROTO_TCP );
     if ( Socket < 0 )
     {
@@ -169,13 +186,10 @@ MasterSocket::MasterSocket()
         return;
     }
 
-    HighPriorityQueue =
-        dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 );
+    SocketSource = dispatch_source_create( DISPATCH_SOURCE_TYPE_READ, Socket, 0,
+                                           HighPriorityQueue );
 
-    DispatchSource = dispatch_source_create( DISPATCH_SOURCE_TYPE_READ, Socket,
-                                             0, HighPriorityQueue );
-
-    dispatch_source_set_event_handler( DispatchSource, ^{
+    dispatch_source_set_event_handler( SocketSource, ^{
         int32_t temp_sock = -1;
 
         struct sockaddr_in sin;
@@ -190,11 +204,17 @@ MasterSocket::MasterSocket()
             fprintf( stderr, "Accept failed (errno = %d)\n", errno );
             return;
         }
-        
+
+        {
+            std::string host = inet_ntoa( sin.sin_addr );
+            
 #if DEBUG
-        fprintf( stderr, "Connecting IP Address = '%s'\n",
-                 inet_ntoa( sin.sin_addr ) );
+            fprintf( stderr, "Connecting IP Address = '%s'\n", host.c_str() );
 #endif
+
+            std::lock_guard< std::mutex > guard( SocketMutex );
+            ConnectedSockets.insert( std::make_pair( host, temp_sock ) );
+        }
 
         char buffer[ 4 ] = {0};
         ssize_t bytecount = 0;
@@ -211,7 +231,7 @@ MasterSocket::MasterSocket()
 
         if ( msg )
         { // I suppose we could just use .Lock / .Unlock but whatever
-            std::lock_guard< std::mutex > guard( Mutex );
+            std::lock_guard< std::mutex > guard( MessageMutex );
             PendingMessages.push_back( msg );
         }
 
@@ -222,23 +242,74 @@ MasterSocket::MasterSocket()
         }
     } );
 
-    dispatch_resume( DispatchSource );
+    dispatch_resume( SocketSource );
 }
 
-MasterSocket::~MasterSocket()
+void MasterSocket::InitializeTick()
 {
-    close( Socket );
+    TimerSource = dispatch_source_create( DISPATCH_SOURCE_TYPE_TIMER, 0, 0,
+                                          HighPriorityQueue );
+
+    if ( TimerSource )
+    {
+        dispatch_source_set_timer(
+            TimerSource, dispatch_time( DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC ),
+            5 * NSEC_PER_SEC, ( 1ull * NSEC_PER_SEC ) / 10 );
+
+        dispatch_source_set_event_handler( TimerSource, ^{
+            std::lock_guard< std::mutex > guard( SocketMutex );
+            if ( ConnectedSockets.empty() )
+            {
+                return;
+            }
+
+            std::string encoded;
+            Ping pinger;
+            pinger.SerializeToString( &encoded );
+
+            MsgBase wrapper;
+            wrapper.set_type( MsgBase_MsgId_Ping );
+            wrapper.set_subclass( encoded );
+
+            char* buffer = new char[ wrapper.ByteSize() + 4 ];
+            google::protobuf::io::ArrayOutputStream aos(
+                buffer, wrapper.ByteSize() + 4 );
+            google::protobuf::io::CodedOutputStream out( &aos );
+
+            out.WriteVarint32( wrapper.ByteSize() );
+
+            wrapper.SerializeToCodedStream( &out );
+
+            for ( auto it = ConnectedSockets.cbegin();
+                  it != ConnectedSockets.cend(); ++it )
+            {
+                if ( send( it->second, buffer, wrapper.ByteSize() + 4, 0 ) < 0 )
+                {
+                    fprintf( stderr,
+                             "Failed to send packet to '%s' (errno = %d)\n",
+                             it->first.c_str(), errno );
+
+                    ConnectedSockets.erase( it->first );
+                    break;
+                }
+            }
+
+            delete[] buffer;
+        } );
+
+        dispatch_resume( TimerSource );
+    }
 }
 
 size_t MasterSocket::PendingMsgCount()
 {
-    std::lock_guard< std::mutex > guard( Mutex );
+    std::lock_guard< std::mutex > guard( MessageMutex );
     return PendingMessages.size();
 }
 
 google::protobuf::Message* MasterSocket::PopMessage()
 {
-    std::lock_guard< std::mutex > guard( Mutex );
+    std::lock_guard< std::mutex > guard( MessageMutex );
     auto* msg = PendingMessages.front();
     PendingMessages.pop_front();
 

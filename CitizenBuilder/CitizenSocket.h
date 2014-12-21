@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 #include <google/protobuf/message.h>
+#include <dispatch/dispatch.h>
 
 class CitizenSocket
 {
@@ -19,6 +20,8 @@ public:
 
     CitizenSocket();
     ~CitizenSocket();
+
+    void InitializeSocket();
 
     /**
      *  Send a message to the server
@@ -30,6 +33,9 @@ public:
 
 private:
     int32_t Socket;
+
+    dispatch_queue_t HighPriorityQueue;
+    dispatch_source_t SocketSource;
 };
 
 #endif /* defined(__MasterBuilder__CitizenSocket__) */

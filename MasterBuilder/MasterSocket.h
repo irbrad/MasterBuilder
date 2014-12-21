@@ -13,6 +13,7 @@
 #include <dispatch/dispatch.h>
 #include <thread>
 #include <deque>
+#include <unordered_map>
 
 /**
  *  This is our master socket, or the thing we're listening to all of the
@@ -26,6 +27,9 @@ public:
 
     MasterSocket();
     ~MasterSocket();
+
+    void InitializeSocket();
+    void InitializeTick();
 
     /**
      *  Determine the number of pending messages we've got stored up from
@@ -44,11 +48,12 @@ public:
 
 private:
     int32_t Socket;
-    dispatch_source_t DispatchSource;
+    dispatch_source_t SocketSource, TimerSource;
     dispatch_queue_t HighPriorityQueue;
 
-    std::mutex Mutex;
+    std::mutex MessageMutex, SocketMutex;
     std::deque< google::protobuf::Message* > PendingMessages;
+    std::unordered_map< std::string, int32_t > ConnectedSockets;
 };
 
 #endif /* defined(__MasterBuilder__MasterSocket__) */
