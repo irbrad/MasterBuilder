@@ -7,8 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D018C5EF1A461A0400B9D547 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5ED1A461A0400B9D547 /* Application.cpp */; };
+		D018C5F01A461A0400B9D547 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5ED1A461A0400B9D547 /* Application.cpp */; };
+		D018C5F31A461AE800B9D547 /* CitizenBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5F11A461AE800B9D547 /* CitizenBuilder.cpp */; };
+		D018C5F71A46262100B9D547 /* AppState_Startup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5F51A46262100B9D547 /* AppState_Startup.cpp */; };
+		D018C5FA1A4626DE00B9D547 /* AppState_Running.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5F81A4626DE00B9D547 /* AppState_Running.cpp */; };
+		D018C5FD1A4627A100B9D547 /* AppState_Shutdown.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5FB1A4627A100B9D547 /* AppState_Shutdown.cpp */; };
+		D018C6001A4628C600B9D547 /* CitizenSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5FE1A4628C600B9D547 /* CitizenSocket.cpp */; };
 		D09299D41A44686700E9DEC2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299D31A44686700E9DEC2 /* main.cpp */; };
+		D09299DC1A44688100E9DEC2 /* MasterBuilderApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299DA1A44688100E9DEC2 /* MasterBuilderApplication.cpp */; };
+		D09299E31A44710800E9DEC2 /* ApplicationState_Startup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299E11A44710800E9DEC2 /* ApplicationState_Startup.cpp */; };
+		D09299E61A44722500E9DEC2 /* ApplicationState_Running.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299E41A44722500E9DEC2 /* ApplicationState_Running.cpp */; };
+		D09299E91A4472E100E9DEC2 /* ApplicationState_Shutdown.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299E71A4472E100E9DEC2 /* ApplicationState_Shutdown.cpp */; };
+		D09299ED1A44742600E9DEC2 /* CitizenDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299EB1A44742600E9DEC2 /* CitizenDB.cpp */; };
+		D09299F41A45B7FA00E9DEC2 /* MasterSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299F21A45B7FA00E9DEC2 /* MasterSocket.cpp */; };
+		D0929A001A45F1B800E9DEC2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299FF1A45F1B800E9DEC2 /* main.cpp */; };
+		D0929A071A45F25F00E9DEC2 /* Messages.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = D0929A051A45F25F00E9DEC2 /* Messages.pb.cc */; };
+		D0929A081A45F25F00E9DEC2 /* Messages.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = D0929A051A45F25F00E9DEC2 /* Messages.pb.cc */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		D09299F01A45AF9C00E9DEC2 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.proto";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"$(PROJECT_DIR)/Generated/$(INPUT_FILE_BASE).pb.cc\n$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).pb.h",
+				"$(PROJECT_DIR)/Generated/$(INPUT_FILE_BASE).pb.h",
+			);
+			script = "cd ${INPUT_FILE_DIR}\n/usr/local/bin/protoc --proto_path=${INPUT_FILE_DIR} ${INPUT_FILE_PATH} --cpp_out=${PROJECT_DIR}/Generated/";
+		};
+/* End PBXBuildRule section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		D09299CE1A44686700E9DEC2 /* CopyFiles */ = {
@@ -20,11 +51,50 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		D09299FB1A45F1B800E9DEC2 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D018C5E91A46195A00B9D547 /* ApplicationState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApplicationState.h; path = Interfaces/ApplicationState.h; sourceTree = "<group>"; };
+		D018C5ED1A461A0400B9D547 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = Interfaces/Application.cpp; sourceTree = "<group>"; };
+		D018C5EE1A461A0400B9D547 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = Interfaces/Application.h; sourceTree = "<group>"; };
+		D018C5F11A461AE800B9D547 /* CitizenBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CitizenBuilder.cpp; sourceTree = "<group>"; };
+		D018C5F21A461AE800B9D547 /* CitizenBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CitizenBuilder.h; sourceTree = "<group>"; };
+		D018C5F51A46262100B9D547 /* AppState_Startup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppState_Startup.cpp; sourceTree = "<group>"; };
+		D018C5F61A46262100B9D547 /* AppState_Startup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppState_Startup.h; sourceTree = "<group>"; };
+		D018C5F81A4626DE00B9D547 /* AppState_Running.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppState_Running.cpp; sourceTree = "<group>"; };
+		D018C5F91A4626DE00B9D547 /* AppState_Running.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppState_Running.h; sourceTree = "<group>"; };
+		D018C5FB1A4627A100B9D547 /* AppState_Shutdown.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppState_Shutdown.cpp; sourceTree = "<group>"; };
+		D018C5FC1A4627A100B9D547 /* AppState_Shutdown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppState_Shutdown.h; sourceTree = "<group>"; };
+		D018C5FE1A4628C600B9D547 /* CitizenSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CitizenSocket.cpp; sourceTree = "<group>"; };
+		D018C5FF1A4628C600B9D547 /* CitizenSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CitizenSocket.h; sourceTree = "<group>"; };
 		D09299D01A44686700E9DEC2 /* MasterBuilder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MasterBuilder; sourceTree = BUILT_PRODUCTS_DIR; };
 		D09299D31A44686700E9DEC2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		D09299DA1A44688100E9DEC2 /* MasterBuilderApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterBuilderApplication.cpp; sourceTree = "<group>"; };
+		D09299DB1A44688100E9DEC2 /* MasterBuilderApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterBuilderApplication.h; sourceTree = "<group>"; };
+		D09299E11A44710800E9DEC2 /* ApplicationState_Startup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplicationState_Startup.cpp; sourceTree = "<group>"; };
+		D09299E21A44710800E9DEC2 /* ApplicationState_Startup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationState_Startup.h; sourceTree = "<group>"; };
+		D09299E41A44722500E9DEC2 /* ApplicationState_Running.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplicationState_Running.cpp; sourceTree = "<group>"; };
+		D09299E51A44722500E9DEC2 /* ApplicationState_Running.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationState_Running.h; sourceTree = "<group>"; };
+		D09299E71A4472E100E9DEC2 /* ApplicationState_Shutdown.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplicationState_Shutdown.cpp; sourceTree = "<group>"; };
+		D09299E81A4472E100E9DEC2 /* ApplicationState_Shutdown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationState_Shutdown.h; sourceTree = "<group>"; };
+		D09299EB1A44742600E9DEC2 /* CitizenDB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CitizenDB.cpp; sourceTree = "<group>"; };
+		D09299EC1A44742600E9DEC2 /* CitizenDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CitizenDB.h; sourceTree = "<group>"; };
+		D09299F21A45B7FA00E9DEC2 /* MasterSocket.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = MasterSocket.cpp; sourceTree = "<group>"; };
+		D09299F31A45B7FA00E9DEC2 /* MasterSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterSocket.h; sourceTree = "<group>"; };
+		D09299FD1A45F1B800E9DEC2 /* CitizenBuilder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CitizenBuilder; sourceTree = BUILT_PRODUCTS_DIR; };
+		D09299FF1A45F1B800E9DEC2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		D0929A051A45F25F00E9DEC2 /* Messages.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Messages.pb.cc; path = Generated/Messages.pb.cc; sourceTree = SOURCE_ROOT; };
+		D0929A061A45F25F00E9DEC2 /* Messages.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Messages.pb.h; path = Generated/Messages.pb.h; sourceTree = SOURCE_ROOT; };
+		D0929A0A1A45F81100E9DEC2 /* Messages.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Messages.proto; path = Messaging/Messages.proto; sourceTree = SOURCE_ROOT; usesTabs = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,13 +105,47 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D09299FA1A45F1B800E9DEC2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D018C5E81A46191C00B9D547 /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				D018C5E91A46195A00B9D547 /* ApplicationState.h */,
+				D018C5ED1A461A0400B9D547 /* Application.cpp */,
+				D018C5EE1A461A0400B9D547 /* Application.h */,
+			);
+			name = Interfaces;
+			sourceTree = "<group>";
+		};
+		D018C5F41A461B6300B9D547 /* AppStates */ = {
+			isa = PBXGroup;
+			children = (
+				D018C5F51A46262100B9D547 /* AppState_Startup.cpp */,
+				D018C5F61A46262100B9D547 /* AppState_Startup.h */,
+				D018C5F81A4626DE00B9D547 /* AppState_Running.cpp */,
+				D018C5F91A4626DE00B9D547 /* AppState_Running.h */,
+				D018C5FB1A4627A100B9D547 /* AppState_Shutdown.cpp */,
+				D018C5FC1A4627A100B9D547 /* AppState_Shutdown.h */,
+			);
+			name = AppStates;
+			sourceTree = "<group>";
+		};
 		D09299C71A44686700E9DEC2 = {
 			isa = PBXGroup;
 			children = (
+				D018C5E81A46191C00B9D547 /* Interfaces */,
+				D09299EE1A45AE7200E9DEC2 /* Messaging */,
+				D09299F51A45C50F00E9DEC2 /* Generated */,
 				D09299D21A44686700E9DEC2 /* MasterBuilder */,
+				D09299FE1A45F1B800E9DEC2 /* CitizenBuilder */,
 				D09299D11A44686700E9DEC2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				D09299D01A44686700E9DEC2 /* MasterBuilder */,
+				D09299FD1A45F1B800E9DEC2 /* CitizenBuilder */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -57,9 +162,61 @@
 		D09299D21A44686700E9DEC2 /* MasterBuilder */ = {
 			isa = PBXGroup;
 			children = (
+				D09299E01A4470F300E9DEC2 /* AppStates */,
 				D09299D31A44686700E9DEC2 /* main.cpp */,
+				D09299DA1A44688100E9DEC2 /* MasterBuilderApplication.cpp */,
+				D09299DB1A44688100E9DEC2 /* MasterBuilderApplication.h */,
+				D09299EB1A44742600E9DEC2 /* CitizenDB.cpp */,
+				D09299EC1A44742600E9DEC2 /* CitizenDB.h */,
+				D09299F21A45B7FA00E9DEC2 /* MasterSocket.cpp */,
+				D09299F31A45B7FA00E9DEC2 /* MasterSocket.h */,
 			);
 			path = MasterBuilder;
+			sourceTree = "<group>";
+		};
+		D09299E01A4470F300E9DEC2 /* AppStates */ = {
+			isa = PBXGroup;
+			children = (
+				D09299E11A44710800E9DEC2 /* ApplicationState_Startup.cpp */,
+				D09299E21A44710800E9DEC2 /* ApplicationState_Startup.h */,
+				D09299E41A44722500E9DEC2 /* ApplicationState_Running.cpp */,
+				D09299E51A44722500E9DEC2 /* ApplicationState_Running.h */,
+				D09299E71A4472E100E9DEC2 /* ApplicationState_Shutdown.cpp */,
+				D09299E81A4472E100E9DEC2 /* ApplicationState_Shutdown.h */,
+			);
+			name = AppStates;
+			sourceTree = "<group>";
+		};
+		D09299EE1A45AE7200E9DEC2 /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				D0929A0A1A45F81100E9DEC2 /* Messages.proto */,
+			);
+			name = Messaging;
+			path = MasterBuilder;
+			sourceTree = "<group>";
+		};
+		D09299F51A45C50F00E9DEC2 /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				D0929A051A45F25F00E9DEC2 /* Messages.pb.cc */,
+				D0929A061A45F25F00E9DEC2 /* Messages.pb.h */,
+			);
+			name = Generated;
+			path = MasterBuilder;
+			sourceTree = "<group>";
+		};
+		D09299FE1A45F1B800E9DEC2 /* CitizenBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				D018C5F41A461B6300B9D547 /* AppStates */,
+				D09299FF1A45F1B800E9DEC2 /* main.cpp */,
+				D018C5F11A461AE800B9D547 /* CitizenBuilder.cpp */,
+				D018C5F21A461AE800B9D547 /* CitizenBuilder.h */,
+				D018C5FE1A4628C600B9D547 /* CitizenSocket.cpp */,
+				D018C5FF1A4628C600B9D547 /* CitizenSocket.h */,
+			);
+			path = CitizenBuilder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,12 +231,30 @@
 				D09299CE1A44686700E9DEC2 /* CopyFiles */,
 			);
 			buildRules = (
+				D09299F01A45AF9C00E9DEC2 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
 			name = MasterBuilder;
 			productName = MasterBuilder;
 			productReference = D09299D01A44686700E9DEC2 /* MasterBuilder */;
+			productType = "com.apple.product-type.tool";
+		};
+		D09299FC1A45F1B800E9DEC2 /* CitizenBuilder */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0929A011A45F1B800E9DEC2 /* Build configuration list for PBXNativeTarget "CitizenBuilder" */;
+			buildPhases = (
+				D09299F91A45F1B800E9DEC2 /* Sources */,
+				D09299FA1A45F1B800E9DEC2 /* Frameworks */,
+				D09299FB1A45F1B800E9DEC2 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CitizenBuilder;
+			productName = CitizenBuilder;
+			productReference = D09299FD1A45F1B800E9DEC2 /* CitizenBuilder */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -92,6 +267,9 @@
 				ORGANIZATIONNAME = Pawkette;
 				TargetAttributes = {
 					D09299CF1A44686700E9DEC2 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					D09299FC1A45F1B800E9DEC2 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
 				};
@@ -109,6 +287,7 @@
 			projectRoot = "";
 			targets = (
 				D09299CF1A44686700E9DEC2 /* MasterBuilder */,
+				D09299FC1A45F1B800E9DEC2 /* CitizenBuilder */,
 			);
 		};
 /* End PBXProject section */
@@ -118,7 +297,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D09299E31A44710800E9DEC2 /* ApplicationState_Startup.cpp in Sources */,
+				D09299DC1A44688100E9DEC2 /* MasterBuilderApplication.cpp in Sources */,
+				D018C5EF1A461A0400B9D547 /* Application.cpp in Sources */,
+				D09299ED1A44742600E9DEC2 /* CitizenDB.cpp in Sources */,
 				D09299D41A44686700E9DEC2 /* main.cpp in Sources */,
+				D09299E91A4472E100E9DEC2 /* ApplicationState_Shutdown.cpp in Sources */,
+				D09299F41A45B7FA00E9DEC2 /* MasterSocket.cpp in Sources */,
+				D09299E61A44722500E9DEC2 /* ApplicationState_Running.cpp in Sources */,
+				D0929A071A45F25F00E9DEC2 /* Messages.pb.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D09299F91A45F1B800E9DEC2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D018C5F01A461A0400B9D547 /* Application.cpp in Sources */,
+				D018C6001A4628C600B9D547 /* CitizenSocket.cpp in Sources */,
+				D018C5FD1A4627A100B9D547 /* AppState_Shutdown.cpp in Sources */,
+				D018C5FA1A4626DE00B9D547 /* AppState_Running.cpp in Sources */,
+				D018C5F31A461AE800B9D547 /* CitizenBuilder.cpp in Sources */,
+				D018C5F71A46262100B9D547 /* AppState_Startup.cpp in Sources */,
+				D0929A081A45F25F00E9DEC2 /* Messages.pb.cc in Sources */,
+				D0929A001A45F1B800E9DEC2 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +404,18 @@
 		D09299D81A44686700E9DEC2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				FRAMEWORK_SEARCH_PATHS = /usr/local/lib;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = (
+					"-lprotobuf",
+					"-lprotoc",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -209,6 +423,58 @@
 		D09299D91A44686700E9DEC2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				FRAMEWORK_SEARCH_PATHS = /usr/local/lib;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = (
+					"-lprotobuf",
+					"-lprotoc",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		D0929A021A45F1B800E9DEC2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = /usr/local/lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = (
+					"-lprotoc",
+					"-lprotobuf",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		D0929A031A45F1B800E9DEC2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = /usr/local/lib;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = (
+					"-lprotoc",
+					"-lprotobuf",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -232,6 +498,16 @@
 				D09299D91A44686700E9DEC2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D0929A011A45F1B800E9DEC2 /* Build configuration list for PBXNativeTarget "CitizenBuilder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0929A021A45F1B800E9DEC2 /* Debug */,
+				D0929A031A45F1B800E9DEC2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

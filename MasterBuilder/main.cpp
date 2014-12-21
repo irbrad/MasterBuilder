@@ -6,10 +6,21 @@
 //  Copyright (c) 2014 Pawkette. All rights reserved.
 //
 
-#include <iostream>
+#include "MasterBuilderApplication.h"
 
-int main(int argc, const char * argv[]) {
+#include <google/protobuf/message.h>
+
+int main( int argc, const char* argv[] )
+{
     // insert code here...
-    std::cout << "Hello, World!\n";
+    MasterBuilderApplication application;
+
+    while ( !application.Shutdown() )
+    {
+        application.Update();
+    }
+
+    google::protobuf::ShutdownProtobufLibrary();
+
     return 0;
 }

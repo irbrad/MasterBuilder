@@ -1,0 +1,50 @@
+message MsgBase
+{
+    enum MsgId
+    {
+        Invalid = 1;
+        Register = 2;
+        Unregister = 3;
+        Load = 4;
+        RequestCPU = 5;
+        ReleaseCPU = 6;
+        Ping = 7;
+    }
+
+    required MsgId Type = 1;
+    required bytes Subclass = 2;
+}
+
+message Register
+{
+    required string Host = 1;
+    required uint32 CoreCount = 2;
+    required uint32 Priority = 3;
+}
+
+message Unregister
+{
+    required string Host = 1;
+}
+
+message Load
+{
+    required float Usage = 1;
+}
+
+message RequestCPU
+{
+    optional string Host = 1;
+    optional uint32 Core = 2;
+}
+
+message ReleaseCPU
+{
+    required string Host = 1;
+    required uint32 Core = 2;
+}
+
+message Ping
+{
+    required bool Alive = 1;
+}
