@@ -18,6 +18,8 @@ class CitizenBuilder : public Application
 public:
     CitizenBuilder();
 
+    void Update() override;
+
 protected:
     class IApplicationState* CreateAppState( unsigned state ) const override;
 };

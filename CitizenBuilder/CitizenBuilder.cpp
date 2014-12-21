@@ -13,6 +13,8 @@
 #include "AppState_Running.h"
 #include "AppState_Shutdown.h"
 
+#include <unistd.h>
+
 CitizenBuilder::CitizenBuilder()
     : Application( CreateAppState( EApplicationState::Startup ) )
 {
@@ -28,4 +30,11 @@ IApplicationState* CitizenBuilder::CreateAppState( unsigned state ) const
         case EApplicationState::Invalid: // intentional fallthrough
         default: return nullptr;
     }
+}
+
+void CitizenBuilder::Update()
+{
+    Application::Update();
+
+    usleep( 1000000 );
 }

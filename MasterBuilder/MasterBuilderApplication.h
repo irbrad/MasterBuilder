@@ -22,6 +22,8 @@ public:
     static class CitizenDB* DB;
     static class MasterSocket* Socket;
 
+    void Update() override;
+
 protected:
     class IApplicationState* CreateAppState( unsigned state ) const override;
 };

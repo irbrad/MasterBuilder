@@ -36,3 +36,10 @@ IApplicationState* MasterBuilderApplication::CreateAppState( unsigned state ) co
         default: return nullptr;
     }
 }
+
+void MasterBuilderApplication::Update()
+{
+    Application::Update();
+
+    usleep( 1000000 );
+}

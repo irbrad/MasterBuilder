@@ -21,6 +21,8 @@
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 
+#include "Messaging.h"
+
 #include "Messages.pb.h"
 
 /*static*/ CitizenSocket* CitizenSocket::instance = nullptr;
@@ -92,7 +94,14 @@ void CitizenSocket::InitializeSocket()
             return;
         }
 
-        fprintf( stderr, "Successfully read from socket (header = %s)\n", buffer );
+        MsgBase* msg = new MsgBase;
+        Utils::ParseMessage( Socket, Utils::ParseHeader( buffer ), msg );
+
+        if ( msg )
+        { // I suppose we could just use .Lock / .Unlock but whatever
+            std::lock_guard< std::mutex > guard( Mutex );
+            PendingMessages.push_back( msg );
+        }
 
     } );
 
@@ -126,4 +135,19 @@ void CitizenSocket::SendMsg( google::protobuf::Message* msg, uint32_t msgType )
     }
 
     delete[] buffer;
+}
+
+size_t CitizenSocket::PendingMsgCount()
+{
+    std::lock_guard< std::mutex > guard( Mutex );
+    return PendingMessages.size();
+}
+
+MsgBase* CitizenSocket::PopMessage()
+{
+    std::lock_guard< std::mutex > guard( Mutex );
+    MsgBase* result = PendingMessages.front();
+    PendingMessages.pop_front();
+
+    return result;
 }
