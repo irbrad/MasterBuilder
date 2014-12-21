@@ -26,45 +26,61 @@ void ApplicationState_Running::Update()
 {
     if ( MasterSocket::instance && MasterSocket::instance->PendingMsgCount() )
     {
-        google::protobuf::Message* result =
-            MasterSocket::instance->PopMessage();
-
-        if ( result )
+        MsgBase* result = MasterSocket::instance->PopMessage();
+        if ( !result )
         {
-            // I feel kind of bad about this Dynamic Cast chain, but whatever.
-            if ( Load* msg = dynamic_cast< Load* >( result ) )
-            {
-                delete msg;
-            }
-            else if ( RequestCPU* msg = dynamic_cast< RequestCPU* >( result ) )
-            {
-                std::string host = "";
-                uint8_t core = 0;
-                if ( CitizenDB::instance->RequestCore( host, core ) )
-                {
-                }
+            return;
+        }
 
-                delete msg;
-            }
-            else if ( ReleaseCPU* msg = dynamic_cast< ReleaseCPU* >( result ) )
+        switch ( result->type() )
+        {
+        case MsgBase_MsgId_Register:
+        {
+            Register* regMsg = MasterSocket::CreateMsgSubclass< Register >(
+                result->subclass() );
+            if ( regMsg )
             {
-                CitizenDB::instance->ReleaseCore( msg->host(), msg->core() );
-
-                delete msg;
+                CitizenDB::instance->Register(
+                    regMsg->host(), regMsg->corecount(), regMsg->priority() );
+                delete regMsg;
             }
-            else if ( Register* msg = dynamic_cast< Register* >( result ) )
+            break;
+        }
+        case MsgBase_MsgId_Unregister:
+        {
+            Unregister* unregMsg =
+                MasterSocket::CreateMsgSubclass< Unregister >(
+                    result->subclass() );
+            if ( unregMsg )
             {
-                CitizenDB::instance->Register( msg->host(), msg->corecount(),
-                                               msg->priority() );
-
-                delete msg;
+                CitizenDB::instance->Release( unregMsg->host() );
             }
-            else if ( Unregister* msg = dynamic_cast< Unregister* >( result ) )
-            {
-                CitizenDB::instance->Release( msg->host() );
-
-                delete msg;
-            }
+            delete unregMsg;
+            break;
+        }
+        case MsgBase_MsgId_Load:
+        {
+            Load* loadMsg =
+                MasterSocket::CreateMsgSubclass< Load >( result->subclass() );
+            delete loadMsg;
+            break;
+        }
+        case MsgBase_MsgId_RequestCPU:
+        {
+            RequestCPU* requestMsg =
+                MasterSocket::CreateMsgSubclass< RequestCPU >(
+                    result->subclass() );
+            delete requestMsg;
+            break;
+        }
+        case MsgBase_MsgId_ReleaseCPU:
+        {
+            ReleaseCPU* releaseMsg =
+                MasterSocket::CreateMsgSubclass< ReleaseCPU >(
+                    result->subclass() );
+            delete releaseMsg;
+            break;
+        }
         }
     }
 }

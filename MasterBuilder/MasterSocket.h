@@ -51,7 +51,22 @@ public:
      *
      *  @return a pointer to a unprocessed message
      */
-    google::protobuf::Message* PopMessage();
+    class MsgBase* PopMessage();
+
+    /**
+     *  Allocates a message of type T
+     *
+     *  @param Data a string that we can parse containing our message body
+     *
+     *  @return pointer of type T that has been constructed using Data
+     */
+    template < typename T >
+    static T* CreateMsgSubclass( const std::string& Data )
+    {
+        T* result = new T;
+        result->ParseFromString( Data );
+        return result;
+    }
 
 private:
     int32_t Socket;
@@ -59,7 +74,7 @@ private:
     dispatch_queue_t HighPriorityQueue;
 
     std::mutex MessageMutex, SocketMutex;
-    std::deque< google::protobuf::Message* > PendingMessages;
+    std::deque< class MsgBase* > PendingMessages;
     std::unordered_map< std::string, int32_t > ConnectedSockets;
 };
 

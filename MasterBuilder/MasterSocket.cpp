@@ -40,31 +40,17 @@ google::protobuf::uint32 ParseHeader( const char* buffer )
 }
 
 /**
- *  Allocates a message of type T
- *
- *  @param Data a string that we can parse containing our message body
- *
- *  @return pointer of type T that has been constructed using Data
- */
-template < typename T >
-T* MsgSubclass( const std::string& Data )
-{
-    T* result = new T;
-    result->ParseFromString( Data );
-    return result;
-}
-
-/**
  *  Parse the state of our master socket and return a pointer representing a
  *  message
  *
  *  @param Socket the socket we're operating on
  *  @param Size   the computed header size
+ *  @param Result place to store the parsed message
  *
  *  @return a child of Message based on the type on the wire
  */
-google::protobuf::Message* ParseMessage( int32_t Socket,
-                                         google::protobuf::uint32 Size )
+void ParseMessage( int32_t Socket, google::protobuf::uint32 Size,
+                   MsgBase* Result )
 {
     ssize_t bytecount = 0;
     char buffer[ Size + 4 ];
@@ -72,7 +58,7 @@ google::protobuf::Message* ParseMessage( int32_t Socket,
     if ( ( bytecount = recv( Socket, buffer, Size + 4, MSG_WAITALL ) ) < 0 )
     {
         fprintf( stderr, "Parse failed (errno = %d)", errno );
-        return nullptr;
+        return;
     }
 
     google::protobuf::io::ArrayInputStream ais( buffer, Size + 4 );
@@ -83,38 +69,9 @@ google::protobuf::Message* ParseMessage( int32_t Socket,
     google::protobuf::io::CodedInputStream::Limit limit =
         input.PushLimit( Size );
 
-    MsgBase msg;
-    msg.ParseFromCodedStream( &input );
-
-    google::protobuf::Message* result = nullptr;
-
-    switch ( msg.type() )
-    {
-    case MsgBase_MsgId_Register:
-        result = MsgSubclass< Register >( msg.subclass() );
-        break;
-    case MsgBase_MsgId_Unregister:
-        result = MsgSubclass< Unregister >( msg.subclass() );
-        break;
-    case MsgBase_MsgId_Load:
-        result = MsgSubclass< Load >( msg.subclass() );
-        break;
-    case MsgBase_MsgId_RequestCPU:
-        result = MsgSubclass< RequestCPU >( msg.subclass() );
-        break;
-    case MsgBase_MsgId_ReleaseCPU:
-        result = MsgSubclass< ReleaseCPU >( msg.subclass() );
-        break;
-    case MsgBase_MsgId_Ping:
-        result = MsgSubclass< Ping >( msg.subclass() );
-        break;
-    case MsgBase_MsgId_Invalid:
-    default: break;
-    }
+    Result->ParseFromCodedStream( &input );
 
     input.PopLimit( limit );
-
-    return result;
 }
 }
 
@@ -232,8 +189,8 @@ void MasterSocket::InitializeSocket()
             return;
         }
 
-        google::protobuf::Message* msg =
-            ParseMessage( temp_sock, ParseHeader( buffer ) );
+        MsgBase* msg = new MsgBase;
+        ParseMessage( temp_sock, ParseHeader( buffer ), msg );
 
         if ( msg )
         { // I suppose we could just use .Lock / .Unlock but whatever
@@ -259,8 +216,8 @@ void MasterSocket::InitializeTick()
     if ( TimerSource )
     {
         dispatch_source_set_timer(
-            TimerSource, dispatch_time( DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC ),
-            5 * NSEC_PER_SEC, ( 1ull * NSEC_PER_SEC ) / 10 );
+            TimerSource, dispatch_time( DISPATCH_TIME_NOW, 60 * NSEC_PER_SEC ),
+            60 * NSEC_PER_SEC, ( 1ull * NSEC_PER_SEC ) / 10 );
 
         dispatch_source_set_event_handler( TimerSource, ^{
             std::lock_guard< std::mutex > guard( SocketMutex );
@@ -313,7 +270,7 @@ size_t MasterSocket::PendingMsgCount()
     return PendingMessages.size();
 }
 
-google::protobuf::Message* MasterSocket::PopMessage()
+MsgBase* MasterSocket::PopMessage()
 {
     std::lock_guard< std::mutex > guard( MessageMutex );
     auto* msg = PendingMessages.front();
