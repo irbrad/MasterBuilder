@@ -7,6 +7,8 @@
 //
 
 #include "ApplicationState_Shutdown.h"
+
+#include "MasterBuilderApplication.h"
 #include "CitizenDB.h"
 #include "MasterSocket.h"
 
@@ -20,16 +22,16 @@ void ApplicationState_Shutdown::Update()
 
 void ApplicationState_Shutdown::OnEnterState( EApplicationState previousState )
 {
-    if ( CitizenDB::instance )
+    if ( MasterBuilderApplication::DB )
     {
-        delete CitizenDB::instance;
-        CitizenDB::instance = nullptr;
+        delete MasterBuilderApplication::DB;
+        MasterBuilderApplication::DB = nullptr;
     }
 
-    if ( MasterSocket::instance )
+    if ( MasterBuilderApplication::Socket )
     {
-        delete MasterSocket::instance;
-        MasterSocket::instance = nullptr;
+        delete MasterBuilderApplication::Socket;
+        MasterBuilderApplication::Socket = nullptr;
     }
 }
 

@@ -8,8 +8,6 @@
 
 #include "CitizenDB.h"
 
-/*static*/ CitizenDB* CitizenDB::instance = nullptr;
-
 void CitizenDB::Register( const std::string& Host, uint8_t CoreCount, uint8_t PowerIndex )
 {
     const auto& range = Citizens.equal_range( PowerIndex );

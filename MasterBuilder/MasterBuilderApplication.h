@@ -19,6 +19,9 @@ class MasterBuilderApplication : public Application
 public:
     MasterBuilderApplication();
 
+    static class CitizenDB* DB;
+    static class MasterSocket* Socket;
+
 protected:
     class IApplicationState* CreateAppState( unsigned state ) const override;
 };

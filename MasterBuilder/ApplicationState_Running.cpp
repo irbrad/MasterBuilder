@@ -8,8 +8,10 @@
 
 #include "ApplicationState_Running.h"
 
+#include "MasterBuilderApplication.h"
 #include "CitizenDB.h"
 #include "MasterSocket.h"
+#include "Messaging.h"
 
 #include "Messages.pb.h"
 
@@ -24,9 +26,9 @@ EApplicationState ApplicationState_Running::NextState() const
 
 void ApplicationState_Running::Update()
 {
-    if ( MasterSocket::instance && MasterSocket::instance->PendingMsgCount() )
+    if ( MasterBuilderApplication::Socket && MasterBuilderApplication::Socket->PendingMsgCount() )
     {
-        MsgBase* result = MasterSocket::instance->PopMessage();
+        MsgBase* result = MasterBuilderApplication::Socket->PopMessage();
         if ( !result )
         {
             return;
@@ -36,11 +38,10 @@ void ApplicationState_Running::Update()
         {
             case MsgBase_MsgId_Register:
             {
-                if ( Register* regMsg =
-                         MasterSocket::CreateMsgSubclass< Register >( result->subclass() ) )
+                if ( Register* regMsg = Utils::CreateMsgSubclass< Register >( result->subclass() ) )
                 {
-                    CitizenDB::instance->Register( regMsg->host(), regMsg->corecount(),
-                                                   regMsg->priority() );
+                    MasterBuilderApplication::DB->Register( regMsg->host(), regMsg->corecount(),
+                                                            regMsg->priority() );
                     delete regMsg;
                 }
                 break;
@@ -48,16 +49,16 @@ void ApplicationState_Running::Update()
             case MsgBase_MsgId_Unregister:
             {
                 if ( Unregister* unregMsg =
-                         MasterSocket::CreateMsgSubclass< Unregister >( result->subclass() ) )
+                         Utils::CreateMsgSubclass< Unregister >( result->subclass() ) )
                 {
-                    CitizenDB::instance->Release( unregMsg->host() );
+                    MasterBuilderApplication::DB->Release( unregMsg->host() );
                     delete unregMsg;
                 }
                 break;
             }
             case MsgBase_MsgId_Load:
             {
-                if ( Load* loadMsg = MasterSocket::CreateMsgSubclass< Load >( result->subclass() ) )
+                if ( Load* loadMsg = Utils::CreateMsgSubclass< Load >( result->subclass() ) )
                 {
                     delete loadMsg;
                 }
@@ -66,7 +67,7 @@ void ApplicationState_Running::Update()
             case MsgBase_MsgId_RequestCPU:
             {
                 if ( RequestCPU* requestMsg =
-                         MasterSocket::CreateMsgSubclass< RequestCPU >( result->subclass() ) )
+                         Utils::CreateMsgSubclass< RequestCPU >( result->subclass() ) )
                 {
                     delete requestMsg;
                 }
@@ -75,7 +76,7 @@ void ApplicationState_Running::Update()
             case MsgBase_MsgId_ReleaseCPU:
             {
                 if ( ReleaseCPU* releaseMsg =
-                         MasterSocket::CreateMsgSubclass< ReleaseCPU >( result->subclass() ) )
+                         Utils::CreateMsgSubclass< ReleaseCPU >( result->subclass() ) )
                 {
                     delete releaseMsg;
                 }
@@ -83,7 +84,7 @@ void ApplicationState_Running::Update()
             }
             case MsgBase_MsgId_Ping:
             {
-                if ( Ping* pingMsg = MasterSocket::CreateMsgSubclass< Ping >( result->subclass() ) )
+                if ( Ping* pingMsg = Utils::CreateMsgSubclass< Ping >( result->subclass() ) )
                 {
                     delete pingMsg;
                 }

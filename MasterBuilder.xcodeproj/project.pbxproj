@@ -24,6 +24,8 @@
 		D0EC45D71A46991200C9A826 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC45D31A46991200C9A826 /* Application.cpp */; };
 		D0EC45D81A47313700C9A826 /* Messages.proto in Sources */ = {isa = PBXBuildFile; fileRef = D0929A0A1A45F81100E9DEC2 /* Messages.proto */; };
 		D0EC45D91A4731D100C9A826 /* Messages.proto in Sources */ = {isa = PBXBuildFile; fileRef = D0929A0A1A45F81100E9DEC2 /* Messages.proto */; };
+		D0EC45DD1A47599E00C9A826 /* Messaging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC45DC1A47599E00C9A826 /* Messaging.cpp */; };
+		D0EC45DE1A47599E00C9A826 /* Messaging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC45DC1A47599E00C9A826 /* Messaging.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -107,6 +109,8 @@
 		D0EC45D31A46991200C9A826 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = Shared/Application.cpp; sourceTree = "<group>"; };
 		D0EC45D41A46991200C9A826 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = Shared/Application.h; sourceTree = "<group>"; };
 		D0EC45D51A46991200C9A826 /* ApplicationState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApplicationState.h; path = Shared/ApplicationState.h; sourceTree = "<group>"; };
+		D0EC45DB1A4758BA00C9A826 /* Messaging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Messaging.h; path = Shared/Messaging.h; sourceTree = "<group>"; };
+		D0EC45DC1A47599E00C9A826 /* Messaging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Messaging.cpp; path = Shared/Messaging.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +137,8 @@
 				D0EC45D31A46991200C9A826 /* Application.cpp */,
 				D0EC45D41A46991200C9A826 /* Application.h */,
 				D0EC45D51A46991200C9A826 /* ApplicationState.h */,
+				D0EC45DB1A4758BA00C9A826 /* Messaging.h */,
+				D0EC45DC1A47599E00C9A826 /* Messaging.cpp */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -310,6 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0EC45DD1A47599E00C9A826 /* Messaging.cpp in Sources */,
 				D0EC45D81A47313700C9A826 /* Messages.proto in Sources */,
 				D09299E31A44710800E9DEC2 /* ApplicationState_Startup.cpp in Sources */,
 				D09299DC1A44688100E9DEC2 /* MasterBuilderApplication.cpp in Sources */,
@@ -326,6 +333,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0EC45DE1A47599E00C9A826 /* Messaging.cpp in Sources */,
 				D0EC45D91A4731D100C9A826 /* Messages.proto in Sources */,
 				D018C6001A4628C600B9D547 /* CitizenSocket.cpp in Sources */,
 				D018C5FD1A4627A100B9D547 /* AppState_Shutdown.cpp in Sources */,

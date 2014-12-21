@@ -14,6 +14,12 @@
 #include "ApplicationState_Running.h"
 #include "ApplicationState_Shutdown.h"
 
+#include "CitizenDB.h"
+#include "MasterSocket.h"
+
+/*static*/ CitizenDB* MasterBuilderApplication::DB = nullptr;
+/*static*/ MasterSocket* MasterBuilderApplication::Socket = nullptr;
+
 MasterBuilderApplication::MasterBuilderApplication()
     : Application( CreateAppState( EApplicationState::Startup ) )
 {

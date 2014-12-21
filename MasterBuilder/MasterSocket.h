@@ -23,8 +23,6 @@
 class MasterSocket
 {
 public:
-    static MasterSocket* instance;
-
     MasterSocket();
     ~MasterSocket();
 
@@ -52,21 +50,6 @@ public:
      *  @return a pointer to a unprocessed message
      */
     class MsgBase* PopMessage();
-
-    /**
-     *  Allocates a message of type T
-     *
-     *  @param Data a string that we can parse containing our message body
-     *
-     *  @return pointer of type T that has been constructed using Data
-     */
-    template < typename T >
-    static T* CreateMsgSubclass( const std::string& Data )
-    {
-        T* result = new T;
-        result->ParseFromString( Data );
-        return result;
-    }
 
 private:
     int32_t Socket;

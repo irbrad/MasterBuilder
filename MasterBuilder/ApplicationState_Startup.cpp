@@ -8,6 +8,7 @@
 
 #include "ApplicationState_Startup.h"
 
+#include "MasterBuilderApplication.h"
 #include "CitizenDB.h"
 #include "MasterSocket.h"
 
@@ -25,14 +26,14 @@ void ApplicationState_Startup::OnEnterState( EApplicationState previousState )
 {
     if ( previousState == EApplicationState::Invalid )
     {
-        if ( !CitizenDB::instance )
+        if ( !MasterBuilderApplication::DB )
         {
-            CitizenDB::instance = new CitizenDB;
+            MasterBuilderApplication::DB = new CitizenDB;
         }
 
-        if ( !MasterSocket::instance )
+        if ( !MasterBuilderApplication::Socket )
         {
-            MasterSocket::instance = new MasterSocket;
+            MasterBuilderApplication::Socket = new MasterSocket;
         }
     }
 }

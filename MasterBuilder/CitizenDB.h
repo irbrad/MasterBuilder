@@ -17,8 +17,6 @@
 class CitizenDB
 {
 public:
-    static CitizenDB* instance;
-
     /**
      *  Register a citizen to the DB
      *
