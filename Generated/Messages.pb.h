@@ -697,7 +697,7 @@ class Ping : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required bool Alive = 1;
+  // optional bool Alive = 1;
   inline bool has_alive() const;
   inline void clear_alive();
   static const int kAliveFieldNumber = 1;
@@ -1277,7 +1277,7 @@ inline void ReleaseCPU::set_core(::google::protobuf::uint32 value) {
 
 // Ping
 
-// required bool Alive = 1;
+// optional bool Alive = 1;
 inline bool Ping::has_alive() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }

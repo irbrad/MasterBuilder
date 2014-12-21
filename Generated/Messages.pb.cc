@@ -224,7 +224,7 @@ void protobuf_AddDesc_Messages_2eproto() {
     "\002(\r\"\032\n\nUnregister\022\014\n\004Host\030\001 \002(\t\"\025\n\004Load\022"
     "\r\n\005Usage\030\001 \002(\002\"(\n\nRequestCPU\022\014\n\004Host\030\001 \001"
     "(\t\022\014\n\004Core\030\002 \001(\r\"(\n\nReleaseCPU\022\014\n\004Host\030\001"
-    " \002(\t\022\014\n\004Core\030\002 \002(\r\"\025\n\004Ping\022\r\n\005Alive\030\001 \002("
+    " \002(\t\022\014\n\004Core\030\002 \002(\r\"\025\n\004Ping\022\r\n\005Alive\030\001 \001("
     "\010", 401);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "Messages.proto", &protobuf_RegisterTypes);
@@ -2008,7 +2008,7 @@ bool Ping::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required bool Alive = 1;
+      // optional bool Alive = 1;
       case 1: {
         if (tag == 8) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
@@ -2047,7 +2047,7 @@ failure:
 void Ping::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:Ping)
-  // required bool Alive = 1;
+  // optional bool Alive = 1;
   if (has_alive()) {
     ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->alive(), output);
   }
@@ -2062,7 +2062,7 @@ void Ping::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Ping::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:Ping)
-  // required bool Alive = 1;
+  // optional bool Alive = 1;
   if (has_alive()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(1, this->alive(), target);
   }
@@ -2079,7 +2079,7 @@ int Ping::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required bool Alive = 1;
+    // optional bool Alive = 1;
     if (has_alive()) {
       total_size += 1 + 1;
     }
@@ -2131,7 +2131,6 @@ void Ping::CopyFrom(const Ping& from) {
 }
 
 bool Ping::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   return true;
 }
