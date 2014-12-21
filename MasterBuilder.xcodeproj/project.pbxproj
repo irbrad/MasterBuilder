@@ -20,10 +20,10 @@
 		D09299ED1A44742600E9DEC2 /* CitizenDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299EB1A44742600E9DEC2 /* CitizenDB.cpp */; };
 		D09299F41A45B7FA00E9DEC2 /* MasterSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299F21A45B7FA00E9DEC2 /* MasterSocket.cpp */; };
 		D0929A001A45F1B800E9DEC2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299FF1A45F1B800E9DEC2 /* main.cpp */; };
-		D0929A071A45F25F00E9DEC2 /* Messages.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = D0929A051A45F25F00E9DEC2 /* Messages.pb.cc */; };
-		D0929A081A45F25F00E9DEC2 /* Messages.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = D0929A051A45F25F00E9DEC2 /* Messages.pb.cc */; };
 		D0EC45D61A46991200C9A826 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC45D31A46991200C9A826 /* Application.cpp */; };
 		D0EC45D71A46991200C9A826 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC45D31A46991200C9A826 /* Application.cpp */; };
+		D0EC45D81A47313700C9A826 /* Messages.proto in Sources */ = {isa = PBXBuildFile; fileRef = D0929A0A1A45F81100E9DEC2 /* Messages.proto */; };
+		D0EC45D91A4731D100C9A826 /* Messages.proto in Sources */ = {isa = PBXBuildFile; fileRef = D0929A0A1A45F81100E9DEC2 /* Messages.proto */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -34,10 +34,22 @@
 			fileType = pattern.proxy;
 			isEditable = 1;
 			outputFiles = (
-				"$(PROJECT_DIR)/Generated/$(INPUT_FILE_BASE).pb.cc\n$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).pb.h",
+				"$(PROJECT_DIR)/Generated/$(INPUT_FILE_BASE).pb.cc",
 				"$(PROJECT_DIR)/Generated/$(INPUT_FILE_BASE).pb.h",
 			);
-			script = "cd ${INPUT_FILE_DIR}\n/usr/local/bin/protoc --proto_path=${INPUT_FILE_DIR} ${INPUT_FILE_PATH} --cpp_out=${PROJECT_DIR}/Generated/";
+			script = "cd ${INPUT_FILE_DIR}\n/usr/local/bin/protoc --proto_path=${INPUT_FILE_DIR} ${INPUT_FILE_PATH} --cpp_out=${PROJECT_DIR}/Generated";
+		};
+		D0EC45DA1A4731DA00C9A826 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.proto";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"$(PROJECT_DIR)/Generated/$(INPUT_FILE_BASE).pb.cc",
+				"$(PROJECT_DIR)/Generated/$(INPUT_FILE_BASE).pb.h",
+			);
+			script = "cd ${INPUT_FILE_DIR}\n/usr/local/bin/protoc --proto_path=${INPUT_FILE_DIR} ${INPUT_FILE_PATH} --cpp_out=${PROJECT_DIR}/Generated";
 		};
 /* End PBXBuildRule section */
 
@@ -249,6 +261,7 @@
 				D09299FB1A45F1B800E9DEC2 /* CopyFiles */,
 			);
 			buildRules = (
+				D0EC45DA1A4731DA00C9A826 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -297,6 +310,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0EC45D81A47313700C9A826 /* Messages.proto in Sources */,
 				D09299E31A44710800E9DEC2 /* ApplicationState_Startup.cpp in Sources */,
 				D09299DC1A44688100E9DEC2 /* MasterBuilderApplication.cpp in Sources */,
 				D0EC45D61A46991200C9A826 /* Application.cpp in Sources */,
@@ -305,7 +319,6 @@
 				D09299E91A4472E100E9DEC2 /* ApplicationState_Shutdown.cpp in Sources */,
 				D09299F41A45B7FA00E9DEC2 /* MasterSocket.cpp in Sources */,
 				D09299E61A44722500E9DEC2 /* ApplicationState_Running.cpp in Sources */,
-				D0929A071A45F25F00E9DEC2 /* Messages.pb.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,13 +326,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0EC45D91A4731D100C9A826 /* Messages.proto in Sources */,
 				D018C6001A4628C600B9D547 /* CitizenSocket.cpp in Sources */,
 				D018C5FD1A4627A100B9D547 /* AppState_Shutdown.cpp in Sources */,
 				D018C5FA1A4626DE00B9D547 /* AppState_Running.cpp in Sources */,
 				D018C5F31A461AE800B9D547 /* CitizenBuilder.cpp in Sources */,
 				D0EC45D71A46991200C9A826 /* Application.cpp in Sources */,
 				D018C5F71A46262100B9D547 /* AppState_Startup.cpp in Sources */,
-				D0929A081A45F25F00E9DEC2 /* Messages.pb.cc in Sources */,
 				D0929A001A45F1B800E9DEC2 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
