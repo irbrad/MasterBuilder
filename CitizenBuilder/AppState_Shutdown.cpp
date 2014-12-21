@@ -14,6 +14,10 @@
 
 void AppState_Shutdown::Update()
 {
+    if ( !CitizenSocket::instance )
+    {
+        NextAppState = EApplicationState::Invalid;
+    }
 }
 
 void AppState_Shutdown::OnEnterState( EApplicationState previousState )
@@ -31,8 +35,6 @@ void AppState_Shutdown::OnEnterState( EApplicationState previousState )
         delete CitizenSocket::instance;
         CitizenSocket::instance = nullptr;
     }
-
-    NextAppState = EApplicationState::Invalid;
 }
 
 void AppState_Shutdown::OnExitState( EApplicationState nextState )

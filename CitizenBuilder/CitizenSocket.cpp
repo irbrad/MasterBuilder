@@ -9,7 +9,9 @@
 #include "CitizenSocket.h"
 
 #include <sys/socket.h>
+#include <sys/ioctl.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <unistd.h>
@@ -67,7 +69,11 @@ CitizenSocket::CitizenSocket()
 
 CitizenSocket::~CitizenSocket()
 {
-    close( Socket );
+#if DEBUG
+    fprintf( stderr, "~CitizenSocket dtor\n" );
+#endif
+
+    shutdown( Socket, SHUT_RDWR );
 }
 
 void CitizenSocket::SendMsg( google::protobuf::Message* msg, uint32_t msgType )

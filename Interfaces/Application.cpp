@@ -32,11 +32,11 @@ void Application::Update()
         IApplicationState* previousState = CurrentState;
         CurrentState = CreateAppState( nextState );
 
-        previousState->OnExitState( CurrentState->GetState() );
+        previousState->OnExitState( nextState );
 
         if ( CurrentState )
         {
-            CurrentState->OnEnterState( previousState->GetState() );
+            CurrentState->OnEnterState( currentState );
         }
 
         delete previousState;
