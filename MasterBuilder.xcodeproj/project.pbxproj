@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D018C5EF1A461A0400B9D547 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5ED1A461A0400B9D547 /* Application.cpp */; };
-		D018C5F01A461A0400B9D547 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5ED1A461A0400B9D547 /* Application.cpp */; };
 		D018C5F31A461AE800B9D547 /* CitizenBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5F11A461AE800B9D547 /* CitizenBuilder.cpp */; };
 		D018C5F71A46262100B9D547 /* AppState_Startup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5F51A46262100B9D547 /* AppState_Startup.cpp */; };
 		D018C5FA1A4626DE00B9D547 /* AppState_Running.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D018C5F81A4626DE00B9D547 /* AppState_Running.cpp */; };
@@ -24,6 +22,8 @@
 		D0929A001A45F1B800E9DEC2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D09299FF1A45F1B800E9DEC2 /* main.cpp */; };
 		D0929A071A45F25F00E9DEC2 /* Messages.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = D0929A051A45F25F00E9DEC2 /* Messages.pb.cc */; };
 		D0929A081A45F25F00E9DEC2 /* Messages.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = D0929A051A45F25F00E9DEC2 /* Messages.pb.cc */; };
+		D0EC45D61A46991200C9A826 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC45D31A46991200C9A826 /* Application.cpp */; };
+		D0EC45D71A46991200C9A826 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0EC45D31A46991200C9A826 /* Application.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -63,9 +63,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D018C5E91A46195A00B9D547 /* ApplicationState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApplicationState.h; path = Interfaces/ApplicationState.h; sourceTree = "<group>"; };
-		D018C5ED1A461A0400B9D547 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = Interfaces/Application.cpp; sourceTree = "<group>"; };
-		D018C5EE1A461A0400B9D547 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = Interfaces/Application.h; sourceTree = "<group>"; };
 		D018C5F11A461AE800B9D547 /* CitizenBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CitizenBuilder.cpp; sourceTree = "<group>"; };
 		D018C5F21A461AE800B9D547 /* CitizenBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CitizenBuilder.h; sourceTree = "<group>"; };
 		D018C5F51A46262100B9D547 /* AppState_Startup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppState_Startup.cpp; sourceTree = "<group>"; };
@@ -95,6 +92,9 @@
 		D0929A051A45F25F00E9DEC2 /* Messages.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Messages.pb.cc; path = Generated/Messages.pb.cc; sourceTree = SOURCE_ROOT; };
 		D0929A061A45F25F00E9DEC2 /* Messages.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Messages.pb.h; path = Generated/Messages.pb.h; sourceTree = SOURCE_ROOT; };
 		D0929A0A1A45F81100E9DEC2 /* Messages.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Messages.proto; path = Messaging/Messages.proto; sourceTree = SOURCE_ROOT; usesTabs = 0; };
+		D0EC45D31A46991200C9A826 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = Shared/Application.cpp; sourceTree = "<group>"; };
+		D0EC45D41A46991200C9A826 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = Shared/Application.h; sourceTree = "<group>"; };
+		D0EC45D51A46991200C9A826 /* ApplicationState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApplicationState.h; path = Shared/ApplicationState.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,14 +115,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D018C5E81A46191C00B9D547 /* Interfaces */ = {
+		D018C5E81A46191C00B9D547 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				D018C5E91A46195A00B9D547 /* ApplicationState.h */,
-				D018C5ED1A461A0400B9D547 /* Application.cpp */,
-				D018C5EE1A461A0400B9D547 /* Application.h */,
+				D0EC45D31A46991200C9A826 /* Application.cpp */,
+				D0EC45D41A46991200C9A826 /* Application.h */,
+				D0EC45D51A46991200C9A826 /* ApplicationState.h */,
 			);
-			name = Interfaces;
+			name = Shared;
 			sourceTree = "<group>";
 		};
 		D018C5F41A461B6300B9D547 /* AppStates */ = {
@@ -141,7 +141,7 @@
 		D09299C71A44686700E9DEC2 = {
 			isa = PBXGroup;
 			children = (
-				D018C5E81A46191C00B9D547 /* Interfaces */,
+				D018C5E81A46191C00B9D547 /* Shared */,
 				D09299EE1A45AE7200E9DEC2 /* Messaging */,
 				D09299F51A45C50F00E9DEC2 /* Generated */,
 				D09299D21A44686700E9DEC2 /* MasterBuilder */,
@@ -299,7 +299,7 @@
 			files = (
 				D09299E31A44710800E9DEC2 /* ApplicationState_Startup.cpp in Sources */,
 				D09299DC1A44688100E9DEC2 /* MasterBuilderApplication.cpp in Sources */,
-				D018C5EF1A461A0400B9D547 /* Application.cpp in Sources */,
+				D0EC45D61A46991200C9A826 /* Application.cpp in Sources */,
 				D09299ED1A44742600E9DEC2 /* CitizenDB.cpp in Sources */,
 				D09299D41A44686700E9DEC2 /* main.cpp in Sources */,
 				D09299E91A4472E100E9DEC2 /* ApplicationState_Shutdown.cpp in Sources */,
@@ -313,11 +313,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D018C5F01A461A0400B9D547 /* Application.cpp in Sources */,
 				D018C6001A4628C600B9D547 /* CitizenSocket.cpp in Sources */,
 				D018C5FD1A4627A100B9D547 /* AppState_Shutdown.cpp in Sources */,
 				D018C5FA1A4626DE00B9D547 /* AppState_Running.cpp in Sources */,
 				D018C5F31A461AE800B9D547 /* CitizenBuilder.cpp in Sources */,
+				D0EC45D71A46991200C9A826 /* Application.cpp in Sources */,
 				D018C5F71A46262100B9D547 /* AppState_Startup.cpp in Sources */,
 				D0929A081A45F25F00E9DEC2 /* Messages.pb.cc in Sources */,
 				D0929A001A45F1B800E9DEC2 /* main.cpp in Sources */,
