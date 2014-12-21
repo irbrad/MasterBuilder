@@ -21,6 +21,9 @@ public:
     CitizenSocket();
     ~CitizenSocket();
 
+    /**
+     *  Initialize the client socket
+     */
     void InitializeSocket();
 
     /**

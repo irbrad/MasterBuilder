@@ -28,7 +28,14 @@ public:
     MasterSocket();
     ~MasterSocket();
 
+    /**
+     *  Initialize the master server socket
+     */
     void InitializeSocket();
+
+    /**
+     *  Initialize a tick timer dispatch block to ping connected clients
+     */
     void InitializeTick();
 
     /**

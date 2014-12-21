@@ -44,21 +44,24 @@ void CitizenSocket::InitializeSocket()
     Socket = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
     if ( Socket < 0 )
     {
-        fprintf( stderr, "Failed to open socket (errno = %d)\n", errno );
+        fprintf( stderr, "Failed to open socket (error = %s)\n",
+                 strerror( errno ) );
         close( Socket );
         return;
     }
 
     if ( setsockopt( Socket, SOL_SOCKET, SO_REUSEADDR, "1", 4 ) < 0 )
     {
-        fprintf( stderr, "Failed to set socket options (errno = %d)\n", errno );
+        fprintf( stderr, "Failed to set socket options (error = %s)\n",
+                 strerror( errno ) );
         close( Socket );
         return;
     }
 
     if ( setsockopt( Socket, SOL_SOCKET, SO_KEEPALIVE, "1", 4 ) < 0 )
     {
-        fprintf( stderr, "Failed to set socket options (errno = %d)\n", errno );
+        fprintf( stderr, "Failed to set socket options (error = %s)\n",
+                 strerror( errno ) );
         close( Socket );
         return;
     }
@@ -84,36 +87,19 @@ void CitizenSocket::InitializeSocket()
                                            HighPriorityQueue );
 
     dispatch_source_set_event_handler( SocketSource, ^{
-        int32_t temp_sock = -1;
-
-        struct sockaddr_in sin;
-        memset( &sin, 0, sizeof( sin ) );
-        sin.sin_family = AF_INET;
-        socklen_t len = sizeof( sin );
-
-        if ( ( temp_sock =
-                   accept( Socket, reinterpret_cast< struct sockaddr* >( &sin ),
-                           &len ) ) < 0 )
-        {
-            fprintf( stderr, "Accept failed (errno = %d)\n", errno );
-            return;
-        }
-
-        std::string host = inet_ntoa( sin.sin_addr );
-        
-#if DEBUG
-        fprintf( stderr, "Connecting IP Address = '%s'\n", host.c_str() );
-#endif
 
         char buffer[ 4 ] = {0};
         ssize_t bytecount = 0;
 
-        if ( ( bytecount = recv( temp_sock, buffer, 4, MSG_PEEK ) ) < 0 )
+        if ( ( bytecount = recv( Socket, buffer, 4, MSG_PEEK ) ) < 0 )
         {
-            fprintf( stderr, "Error reading from socket (errno = %d)\n",
-                     errno );
+            fprintf( stderr, "Error reading from socket (error = %s)\n",
+                     strerror( errno ) );
             return;
         }
+
+        fprintf( stderr, "Successfully read from socket (header = %s)\n",
+                 buffer );
 
     } );
 
@@ -144,7 +130,8 @@ void CitizenSocket::SendMsg( google::protobuf::Message* msg, uint32_t msgType )
 
     if ( send( Socket, buffer, wrapper.ByteSize() + 4, 0 ) < 0 )
     {
-        fprintf( stderr, "Failed to send packet (errno = %d)", errno );
+        fprintf( stderr, "Failed to send packet (error = %s)",
+                 strerror( errno ) );
     }
 
     delete[] buffer;

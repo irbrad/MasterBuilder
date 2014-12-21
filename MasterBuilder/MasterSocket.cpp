@@ -142,7 +142,8 @@ void MasterSocket::InitializeSocket()
     Socket = socket( PF_INET, SOCK_STREAM, IPPROTO_TCP );
     if ( Socket < 0 )
     {
-        fprintf( stderr, "Failed to open socket (errno = %d)\n", errno );
+        fprintf( stderr, "Failed to open socket (error = %s)\n",
+                 strerror( errno ) );
         close( Socket );
         return;
     }
@@ -151,14 +152,16 @@ void MasterSocket::InitializeSocket()
 
     if ( setsockopt( Socket, SOL_SOCKET, SO_REUSEADDR, "1", 4 ) < 0 )
     {
-        fprintf( stderr, "Failed to set socket options (errno = %d)\n", errno );
+        fprintf( stderr, "Failed to set socket options (error = %s)\n",
+                 strerror( errno ) );
         close( Socket );
         return;
     }
 
     if ( setsockopt( Socket, SOL_SOCKET, SO_KEEPALIVE, "1", 4 ) < 0 )
     {
-        fprintf( stderr, "Failed to set socket options (errno = %d)\n", errno );
+        fprintf( stderr, "Failed to set socket options (error = %s)\n",
+                 strerror( errno ) );
         close( Socket );
         return;
     }
@@ -174,14 +177,16 @@ void MasterSocket::InitializeSocket()
     if ( bind( Socket, reinterpret_cast< struct sockaddr* >( &sin ),
                sizeof( sin ) ) < 0 )
     {
-        fprintf( stderr, "Failed to bind socket (errno = %d)\n", errno );
+        fprintf( stderr, "Failed to bind socket (error = %s)\n",
+                 strerror( errno ) );
         close( Socket );
         return;
     }
 
     if ( listen( Socket, 10 ) < 0 )
     {
-        fprintf( stderr, "Failed to listen to socket (errno = %d)\n", errno );
+        fprintf( stderr, "Failed to listen to socket (error = %s)\n",
+                 strerror( errno ) );
         close( Socket );
         return;
     }
@@ -201,7 +206,8 @@ void MasterSocket::InitializeSocket()
                    accept( Socket, reinterpret_cast< struct sockaddr* >( &sin ),
                            &len ) ) < 0 )
         {
-            fprintf( stderr, "Accept failed (errno = %d)\n", errno );
+            fprintf( stderr, "Accept failed (error = %s)\n",
+                     strerror( errno ) );
             return;
         }
 
@@ -221,8 +227,8 @@ void MasterSocket::InitializeSocket()
 
         if ( ( bytecount = recv( temp_sock, buffer, 4, MSG_PEEK ) ) < 0 )
         {
-            fprintf( stderr, "Error reading from socket (errno = %d)\n",
-                     errno );
+            fprintf( stderr, "Error reading from socket (error = %s)\n",
+                     strerror( errno ) );
             return;
         }
 
@@ -286,8 +292,8 @@ void MasterSocket::InitializeTick()
                 if ( send( it->second, buffer, wrapper.ByteSize() + 4, 0 ) < 0 )
                 {
                     fprintf( stderr,
-                             "Failed to send packet to '%s' (errno = %d)\n",
-                             it->first.c_str(), errno );
+                             "Failed to send packet to '%s' (error = %s)\n",
+                             it->first.c_str(), strerror( errno ) );
 
                     ConnectedSockets.erase( it->first );
                     break;
