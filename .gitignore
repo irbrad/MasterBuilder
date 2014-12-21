@@ -1,0 +1,6 @@
+*.hmap
+*.DS_Store
+
+*.xcacheme
+*.scbkplist
+Build/
