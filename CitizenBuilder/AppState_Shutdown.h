@@ -14,11 +14,7 @@
 class AppState_Shutdown : public IApplicationState
 {
 public:
-    EApplicationState GetState() const override
-    {
-        return EApplicationState::Shutdown;
-    }
-
+    EApplicationState GetState() const override { return EApplicationState::Shutdown; }
     EApplicationState NextState() const override { return NextAppState; }
 
     const char* GetStateName() const override { return "Shutdown"; }

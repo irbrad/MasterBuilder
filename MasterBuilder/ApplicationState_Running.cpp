@@ -34,53 +34,49 @@ void ApplicationState_Running::Update()
 
         switch ( result->type() )
         {
-        case MsgBase_MsgId_Register:
-        {
-            Register* regMsg = MasterSocket::CreateMsgSubclass< Register >(
-                result->subclass() );
-            if ( regMsg )
+            case MsgBase_MsgId_Register:
             {
-                CitizenDB::instance->Register(
-                    regMsg->host(), regMsg->corecount(), regMsg->priority() );
-                delete regMsg;
+                Register* regMsg =
+                    MasterSocket::CreateMsgSubclass< Register >( result->subclass() );
+                if ( regMsg )
+                {
+                    CitizenDB::instance->Register( regMsg->host(), regMsg->corecount(),
+                                                   regMsg->priority() );
+                    delete regMsg;
+                }
+                break;
             }
-            break;
-        }
-        case MsgBase_MsgId_Unregister:
-        {
-            Unregister* unregMsg =
-                MasterSocket::CreateMsgSubclass< Unregister >(
-                    result->subclass() );
-            if ( unregMsg )
+            case MsgBase_MsgId_Unregister:
             {
-                CitizenDB::instance->Release( unregMsg->host() );
+                Unregister* unregMsg =
+                    MasterSocket::CreateMsgSubclass< Unregister >( result->subclass() );
+                if ( unregMsg )
+                {
+                    CitizenDB::instance->Release( unregMsg->host() );
+                }
+                delete unregMsg;
+                break;
             }
-            delete unregMsg;
-            break;
-        }
-        case MsgBase_MsgId_Load:
-        {
-            Load* loadMsg =
-                MasterSocket::CreateMsgSubclass< Load >( result->subclass() );
-            delete loadMsg;
-            break;
-        }
-        case MsgBase_MsgId_RequestCPU:
-        {
-            RequestCPU* requestMsg =
-                MasterSocket::CreateMsgSubclass< RequestCPU >(
-                    result->subclass() );
-            delete requestMsg;
-            break;
-        }
-        case MsgBase_MsgId_ReleaseCPU:
-        {
-            ReleaseCPU* releaseMsg =
-                MasterSocket::CreateMsgSubclass< ReleaseCPU >(
-                    result->subclass() );
-            delete releaseMsg;
-            break;
-        }
+            case MsgBase_MsgId_Load:
+            {
+                Load* loadMsg = MasterSocket::CreateMsgSubclass< Load >( result->subclass() );
+                delete loadMsg;
+                break;
+            }
+            case MsgBase_MsgId_RequestCPU:
+            {
+                RequestCPU* requestMsg =
+                    MasterSocket::CreateMsgSubclass< RequestCPU >( result->subclass() );
+                delete requestMsg;
+                break;
+            }
+            case MsgBase_MsgId_ReleaseCPU:
+            {
+                ReleaseCPU* releaseMsg =
+                    MasterSocket::CreateMsgSubclass< ReleaseCPU >( result->subclass() );
+                delete releaseMsg;
+                break;
+            }
         }
     }
 }

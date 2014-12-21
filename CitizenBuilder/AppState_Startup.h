@@ -14,10 +14,7 @@
 class AppState_Startup : public IApplicationState
 {
 public:
-    EApplicationState GetState() const override
-    {
-        return EApplicationState::Startup;
-    }
+    EApplicationState GetState() const override { return EApplicationState::Startup; }
 
     EApplicationState NextState() const override { return NextAppState; }
     const char* GetStateName() const override { return "Startup"; }

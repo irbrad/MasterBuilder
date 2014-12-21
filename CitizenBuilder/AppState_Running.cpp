@@ -13,7 +13,7 @@
 
 namespace
 {
-static AppState_Running* sInstance = nullptr;
+    static AppState_Running* sInstance = nullptr;
 }
 
 void AppState_Running::Update()

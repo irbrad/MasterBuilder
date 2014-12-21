@@ -26,8 +26,7 @@ public:
      *  @param CoreCount  supported hardware parallelism
      *  @param PowerIndex precalculated power rating
      */
-    void Register( const std::string& Host, uint8_t CoreCount,
-                   uint8_t PowerIndex );
+    void Register( const std::string& Host, uint8_t CoreCount, uint8_t PowerIndex );
 
     /**
      *  Release a host
@@ -46,8 +45,8 @@ public:
      *
      *  @return weather or not we found a slave at the provided ip
      */
-    bool Query( const std::string& Host, uint8_t& CoreCount,
-                uint8_t& PowerIndex, uint32_t& CoreUsage );
+    bool Query( const std::string& Host, uint8_t& CoreCount, uint8_t& PowerIndex,
+                uint32_t& CoreUsage );
 
     /**
      *  Request a citizen's core for building

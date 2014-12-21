@@ -22,10 +22,7 @@ class ApplicationState_Running : public IApplicationState
 public:
     ApplicationState_Running();
 
-    EApplicationState GetState() const override
-    {
-        return EApplicationState::Running;
-    }
+    EApplicationState GetState() const override { return EApplicationState::Running; }
 
     EApplicationState NextState() const override;
     const char* GetStateName() const override { return "Running"; }

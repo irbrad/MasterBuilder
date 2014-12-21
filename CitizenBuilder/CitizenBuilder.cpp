@@ -22,10 +22,10 @@ IApplicationState* CitizenBuilder::CreateAppState( unsigned state ) const
 {
     switch ( state )
     {
-    case EApplicationState::Startup: return new AppState_Startup;
-    case EApplicationState::Running: return new AppState_Running;
-    case EApplicationState::Shutdown: return new AppState_Shutdown;
-    case EApplicationState::Invalid: // intentional fallthrough
-    default: return nullptr;
+        case EApplicationState::Startup: return new AppState_Startup;
+        case EApplicationState::Running: return new AppState_Running;
+        case EApplicationState::Shutdown: return new AppState_Shutdown;
+        case EApplicationState::Invalid: // intentional fallthrough
+        default: return nullptr;
     }
 }

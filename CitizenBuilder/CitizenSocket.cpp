@@ -27,8 +27,7 @@
 
 CitizenSocket::CitizenSocket()
 {
-    HighPriorityQueue =
-        dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 );
+    HighPriorityQueue = dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 );
 
     InitializeSocket();
 }
@@ -44,24 +43,21 @@ void CitizenSocket::InitializeSocket()
     Socket = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
     if ( Socket < 0 )
     {
-        fprintf( stderr, "Failed to open socket (error = %s)\n",
-                 strerror( errno ) );
+        fprintf( stderr, "Failed to open socket (error = %s)\n", strerror( errno ) );
         close( Socket );
         return;
     }
 
     if ( setsockopt( Socket, SOL_SOCKET, SO_REUSEADDR, "1", 4 ) < 0 )
     {
-        fprintf( stderr, "Failed to set socket options (error = %s)\n",
-                 strerror( errno ) );
+        fprintf( stderr, "Failed to set socket options (error = %s)\n", strerror( errno ) );
         close( Socket );
         return;
     }
 
     if ( setsockopt( Socket, SOL_SOCKET, SO_KEEPALIVE, "1", 4 ) < 0 )
     {
-        fprintf( stderr, "Failed to set socket options (error = %s)\n",
-                 strerror( errno ) );
+        fprintf( stderr, "Failed to set socket options (error = %s)\n", strerror( errno ) );
         close( Socket );
         return;
     }
@@ -75,16 +71,15 @@ void CitizenSocket::InitializeSocket()
     memset( &( sin.sin_zero ), 0, 8 );
     sin.sin_addr.s_addr = inet_addr( "127.0.0.1" );
 
-    if ( connect( Socket, reinterpret_cast< struct sockaddr* >( &sin ),
-                  sizeof( sin ) ) < 0 )
+    if ( connect( Socket, reinterpret_cast< struct sockaddr* >( &sin ), sizeof( sin ) ) < 0 )
     {
         fprintf( stderr, "Failed to connect socket (errno = %d)\n", errno );
         close( Socket );
         return;
     }
 
-    SocketSource = dispatch_source_create( DISPATCH_SOURCE_TYPE_READ, Socket, 0,
-                                           HighPriorityQueue );
+    SocketSource =
+        dispatch_source_create( DISPATCH_SOURCE_TYPE_READ, Socket, 0, HighPriorityQueue );
 
     dispatch_source_set_event_handler( SocketSource, ^{
 
@@ -93,13 +88,11 @@ void CitizenSocket::InitializeSocket()
 
         if ( ( bytecount = recv( Socket, buffer, 4, MSG_PEEK ) ) < 0 )
         {
-            fprintf( stderr, "Error reading from socket (error = %s)\n",
-                     strerror( errno ) );
+            fprintf( stderr, "Error reading from socket (error = %s)\n", strerror( errno ) );
             return;
         }
 
-        fprintf( stderr, "Successfully read from socket (header = %s)\n",
-                 buffer );
+        fprintf( stderr, "Successfully read from socket (header = %s)\n", buffer );
 
     } );
 
@@ -120,8 +113,7 @@ void CitizenSocket::SendMsg( google::protobuf::Message* msg, uint32_t msgType )
     wrapper.set_subclass( output );
 
     char* buffer = new char[ wrapper.ByteSize() + 4 ];
-    google::protobuf::io::ArrayOutputStream aos( buffer,
-                                                 wrapper.ByteSize() + 4 );
+    google::protobuf::io::ArrayOutputStream aos( buffer, wrapper.ByteSize() + 4 );
     google::protobuf::io::CodedOutputStream out( &aos );
 
     out.WriteVarint32( wrapper.ByteSize() );
@@ -130,8 +122,7 @@ void CitizenSocket::SendMsg( google::protobuf::Message* msg, uint32_t msgType )
 
     if ( send( Socket, buffer, wrapper.ByteSize() + 4, 0 ) < 0 )
     {
-        fprintf( stderr, "Failed to send packet (error = %s)",
-                 strerror( errno ) );
+        fprintf( stderr, "Failed to send packet (error = %s)", strerror( errno ) );
     }
 
     delete[] buffer;

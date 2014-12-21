@@ -22,65 +22,62 @@
 
 namespace
 {
-/**
- *  Parse the peeked buffer value to determine header size
- *
- *  @param buffer 4 bytes
- *
- *  @return the calculated header size
- */
-google::protobuf::uint32 ParseHeader( const char* buffer )
-{
-    google::protobuf::uint32 size;
-    google::protobuf::io::ArrayInputStream ais( buffer, 4 );
-
-    google::protobuf::io::CodedInputStream input( &ais );
-    input.ReadVarint32( &size );
-    return size;
-}
-
-/**
- *  Parse the state of our master socket and return a pointer representing a
- *  message
- *
- *  @param Socket the socket we're operating on
- *  @param Size   the computed header size
- *  @param Result place to store the parsed message
- *
- *  @return a child of Message based on the type on the wire
- */
-void ParseMessage( int32_t Socket, google::protobuf::uint32 Size,
-                   MsgBase* Result )
-{
-    ssize_t bytecount = 0;
-    char buffer[ Size + 4 ];
-
-    if ( ( bytecount = recv( Socket, buffer, Size + 4, MSG_WAITALL ) ) < 0 )
+    /**
+     *  Parse the peeked buffer value to determine header size
+     *
+     *  @param buffer 4 bytes
+     *
+     *  @return the calculated header size
+     */
+    google::protobuf::uint32 ParseHeader( const char* buffer )
     {
-        fprintf( stderr, "Parse failed (errno = %d)", errno );
-        return;
+        google::protobuf::uint32 size;
+        google::protobuf::io::ArrayInputStream ais( buffer, 4 );
+
+        google::protobuf::io::CodedInputStream input( &ais );
+        input.ReadVarint32( &size );
+        return size;
     }
 
-    google::protobuf::io::ArrayInputStream ais( buffer, Size + 4 );
-    google::protobuf::io::CodedInputStream input( &ais );
+    /**
+     *  Parse the state of our master socket and return a pointer representing a
+     *  message
+     *
+     *  @param Socket the socket we're operating on
+     *  @param Size   the computed header size
+     *  @param Result place to store the parsed message
+     *
+     *  @return a child of Message based on the type on the wire
+     */
+    void ParseMessage( int32_t Socket, google::protobuf::uint32 Size, MsgBase* Result )
+    {
+        ssize_t bytecount = 0;
+        char buffer[ Size + 4 ];
 
-    input.ReadVarint32( &Size );
+        if ( ( bytecount = recv( Socket, buffer, Size + 4, MSG_WAITALL ) ) < 0 )
+        {
+            fprintf( stderr, "Parse failed (errno = %d)", errno );
+            return;
+        }
 
-    google::protobuf::io::CodedInputStream::Limit limit =
-        input.PushLimit( Size );
+        google::protobuf::io::ArrayInputStream ais( buffer, Size + 4 );
+        google::protobuf::io::CodedInputStream input( &ais );
 
-    Result->ParseFromCodedStream( &input );
+        input.ReadVarint32( &Size );
 
-    input.PopLimit( limit );
-}
+        google::protobuf::io::CodedInputStream::Limit limit = input.PushLimit( Size );
+
+        Result->ParseFromCodedStream( &input );
+
+        input.PopLimit( limit );
+    }
 }
 
 /*static*/ MasterSocket* MasterSocket::instance = nullptr;
 
 MasterSocket::MasterSocket()
 {
-    HighPriorityQueue =
-        dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 );
+    HighPriorityQueue = dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 );
 
     InitializeSocket();
     InitializeTick();
@@ -99,8 +96,7 @@ void MasterSocket::InitializeSocket()
     Socket = socket( PF_INET, SOCK_STREAM, IPPROTO_TCP );
     if ( Socket < 0 )
     {
-        fprintf( stderr, "Failed to open socket (error = %s)\n",
-                 strerror( errno ) );
+        fprintf( stderr, "Failed to open socket (error = %s)\n", strerror( errno ) );
         close( Socket );
         return;
     }
@@ -109,16 +105,14 @@ void MasterSocket::InitializeSocket()
 
     if ( setsockopt( Socket, SOL_SOCKET, SO_REUSEADDR, "1", 4 ) < 0 )
     {
-        fprintf( stderr, "Failed to set socket options (error = %s)\n",
-                 strerror( errno ) );
+        fprintf( stderr, "Failed to set socket options (error = %s)\n", strerror( errno ) );
         close( Socket );
         return;
     }
 
     if ( setsockopt( Socket, SOL_SOCKET, SO_KEEPALIVE, "1", 4 ) < 0 )
     {
-        fprintf( stderr, "Failed to set socket options (error = %s)\n",
-                 strerror( errno ) );
+        fprintf( stderr, "Failed to set socket options (error = %s)\n", strerror( errno ) );
         close( Socket );
         return;
     }
@@ -131,25 +125,22 @@ void MasterSocket::InitializeSocket()
     sin.sin_port = htons( 1337 );
     sin.sin_addr.s_addr = INADDR_ANY;
 
-    if ( bind( Socket, reinterpret_cast< struct sockaddr* >( &sin ),
-               sizeof( sin ) ) < 0 )
+    if ( bind( Socket, reinterpret_cast< struct sockaddr* >( &sin ), sizeof( sin ) ) < 0 )
     {
-        fprintf( stderr, "Failed to bind socket (error = %s)\n",
-                 strerror( errno ) );
+        fprintf( stderr, "Failed to bind socket (error = %s)\n", strerror( errno ) );
         close( Socket );
         return;
     }
 
     if ( listen( Socket, 10 ) < 0 )
     {
-        fprintf( stderr, "Failed to listen to socket (error = %s)\n",
-                 strerror( errno ) );
+        fprintf( stderr, "Failed to listen to socket (error = %s)\n", strerror( errno ) );
         close( Socket );
         return;
     }
 
-    SocketSource = dispatch_source_create( DISPATCH_SOURCE_TYPE_READ, Socket, 0,
-                                           HighPriorityQueue );
+    SocketSource =
+        dispatch_source_create( DISPATCH_SOURCE_TYPE_READ, Socket, 0, HighPriorityQueue );
 
     dispatch_source_set_event_handler( SocketSource, ^{
         int32_t temp_sock = -1;
@@ -159,12 +150,10 @@ void MasterSocket::InitializeSocket()
         sin.sin_family = AF_INET;
         socklen_t len = sizeof( sin );
 
-        if ( ( temp_sock =
-                   accept( Socket, reinterpret_cast< struct sockaddr* >( &sin ),
-                           &len ) ) < 0 )
+        if ( ( temp_sock = accept( Socket, reinterpret_cast< struct sockaddr* >( &sin ), &len ) ) <
+             0 )
         {
-            fprintf( stderr, "Accept failed (error = %s)\n",
-                     strerror( errno ) );
+            fprintf( stderr, "Accept failed (error = %s)\n", strerror( errno ) );
             return;
         }
 
@@ -184,8 +173,7 @@ void MasterSocket::InitializeSocket()
 
         if ( ( bytecount = recv( temp_sock, buffer, 4, MSG_PEEK ) ) < 0 )
         {
-            fprintf( stderr, "Error reading from socket (error = %s)\n",
-                     strerror( errno ) );
+            fprintf( stderr, "Error reading from socket (error = %s)\n", strerror( errno ) );
             return;
         }
 
@@ -200,8 +188,7 @@ void MasterSocket::InitializeSocket()
 
         if ( msg )
         {
-            fprintf( stderr, "dumping stuff \n %s \n",
-                     msg->DebugString().c_str() );
+            fprintf( stderr, "dumping stuff \n %s \n", msg->DebugString().c_str() );
         }
     } );
 
@@ -210,14 +197,13 @@ void MasterSocket::InitializeSocket()
 
 void MasterSocket::InitializeTick()
 {
-    TimerSource = dispatch_source_create( DISPATCH_SOURCE_TYPE_TIMER, 0, 0,
-                                          HighPriorityQueue );
+    TimerSource = dispatch_source_create( DISPATCH_SOURCE_TYPE_TIMER, 0, 0, HighPriorityQueue );
 
     if ( TimerSource )
     {
-        dispatch_source_set_timer(
-            TimerSource, dispatch_time( DISPATCH_TIME_NOW, 60 * NSEC_PER_SEC ),
-            60 * NSEC_PER_SEC, ( 1ull * NSEC_PER_SEC ) / 10 );
+        dispatch_source_set_timer( TimerSource,
+                                   dispatch_time( DISPATCH_TIME_NOW, 60 * NSEC_PER_SEC ),
+                                   60 * NSEC_PER_SEC, ( 1ull * NSEC_PER_SEC ) / 10 );
 
         dispatch_source_set_event_handler( TimerSource, ^{
             std::lock_guard< std::mutex > guard( SocketMutex );
@@ -235,21 +221,18 @@ void MasterSocket::InitializeTick()
             wrapper.set_subclass( encoded );
 
             char* buffer = new char[ wrapper.ByteSize() + 4 ];
-            google::protobuf::io::ArrayOutputStream aos(
-                buffer, wrapper.ByteSize() + 4 );
+            google::protobuf::io::ArrayOutputStream aos( buffer, wrapper.ByteSize() + 4 );
             google::protobuf::io::CodedOutputStream out( &aos );
 
             out.WriteVarint32( wrapper.ByteSize() );
 
             wrapper.SerializeToCodedStream( &out );
 
-            for ( auto it = ConnectedSockets.cbegin();
-                  it != ConnectedSockets.cend(); ++it )
+            for ( auto it = ConnectedSockets.cbegin(); it != ConnectedSockets.cend(); ++it )
             {
                 if ( send( it->second, buffer, wrapper.ByteSize() + 4, 0 ) < 0 )
                 {
-                    fprintf( stderr,
-                             "Failed to send packet to '%s' (error = %s)\n",
+                    fprintf( stderr, "Failed to send packet to '%s' (error = %s)\n",
                              it->first.c_str(), strerror( errno ) );
 
                     ConnectedSockets.erase( it->first );

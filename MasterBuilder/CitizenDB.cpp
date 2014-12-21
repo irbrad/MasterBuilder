@@ -10,14 +10,12 @@
 
 /*static*/ CitizenDB* CitizenDB::instance = nullptr;
 
-void CitizenDB::Register( const std::string& Host, uint8_t CoreCount,
-                          uint8_t PowerIndex )
+void CitizenDB::Register( const std::string& Host, uint8_t CoreCount, uint8_t PowerIndex )
 {
     const auto& range = Citizens.equal_range( PowerIndex );
     if ( range.first == range.second )
     {
-        Citizens.insert(
-            std::make_pair( PowerIndex, Citizen{Host, CoreCount, 0} ) );
+        Citizens.insert( std::make_pair( PowerIndex, Citizen{Host, CoreCount, 0} ) );
     }
     else
     {
@@ -39,8 +37,7 @@ void CitizenDB::Register( const std::string& Host, uint8_t CoreCount,
 
         if ( !located )
         {
-            Citizens.insert(
-                std::make_pair( PowerIndex, Citizen{Host, CoreCount, 0} ) );
+            Citizens.insert( std::make_pair( PowerIndex, Citizen{Host, CoreCount, 0} ) );
         }
     }
 }
@@ -57,8 +54,8 @@ void CitizenDB::Release( const std::string& Host )
     }
 }
 
-bool CitizenDB::Query( const std::string& Host, uint8_t& CoreCount,
-                       uint8_t& PowerIndex, uint32_t& CoreUsage )
+bool CitizenDB::Query( const std::string& Host, uint8_t& CoreCount, uint8_t& PowerIndex,
+                       uint32_t& CoreUsage )
 {
     for ( const auto it : Citizens )
     {

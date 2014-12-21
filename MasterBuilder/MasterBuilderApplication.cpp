@@ -19,15 +19,14 @@ MasterBuilderApplication::MasterBuilderApplication()
 {
 }
 
-IApplicationState*
-MasterBuilderApplication::CreateAppState( unsigned state ) const
+IApplicationState* MasterBuilderApplication::CreateAppState( unsigned state ) const
 {
     switch ( state )
     {
-    case EApplicationState::Startup: return new ApplicationState_Startup;
-    case EApplicationState::Running: return new ApplicationState_Running;
-    case EApplicationState::Shutdown: return new ApplicationState_Shutdown;
-    case EApplicationState::Invalid: // intentional fallthrough
-    default: return nullptr;
+        case EApplicationState::Startup: return new ApplicationState_Startup;
+        case EApplicationState::Running: return new ApplicationState_Running;
+        case EApplicationState::Shutdown: return new ApplicationState_Shutdown;
+        case EApplicationState::Invalid: // intentional fallthrough
+        default: return nullptr;
     }
 }

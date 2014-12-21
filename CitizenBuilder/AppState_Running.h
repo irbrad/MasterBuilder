@@ -19,10 +19,7 @@ public:
     {
     }
 
-    EApplicationState GetState() const override
-    {
-        return EApplicationState::Running;
-    }
+    EApplicationState GetState() const override { return EApplicationState::Running; }
 
     EApplicationState NextState() const override { return NextAppState; }
     const char* GetStateName() const override { return "Running"; }
