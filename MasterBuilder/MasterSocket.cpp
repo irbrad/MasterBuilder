@@ -10,6 +10,7 @@
 
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <errno.h>
 #include <unistd.h>
 #include <google/protobuf/io/coded_stream.h>
@@ -177,11 +178,23 @@ MasterSocket::MasterSocket()
     dispatch_source_set_event_handler( DispatchSource, ^{
         int32_t temp_sock = -1;
 
-        if ( ( temp_sock = accept( Socket, nullptr, nullptr ) ) < 0 )
+        struct sockaddr_in sin;
+        memset( &sin, 0, sizeof( sin ) );
+        sin.sin_family = AF_INET;
+        socklen_t len = sizeof( sin );
+
+        if ( ( temp_sock =
+                   accept( Socket, reinterpret_cast< struct sockaddr* >( &sin ),
+                           &len ) ) < 0 )
         {
             fprintf( stderr, "Accept failed (errno = %d)\n", errno );
             return;
         }
+        
+#if DEBUG
+        fprintf( stderr, "Connecting IP Address = '%s'\n",
+                 inet_ntoa( sin.sin_addr ) );
+#endif
 
         char buffer[ 4 ] = {0};
         ssize_t bytecount = 0;
