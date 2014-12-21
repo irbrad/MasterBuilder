@@ -32,7 +32,10 @@ void Application::Update()
         IApplicationState* previousState = CurrentState;
         CurrentState = CreateAppState( nextState );
 
-        previousState->OnExitState( nextState );
+        if ( previousState )
+        {
+            previousState->OnExitState( nextState );
+        }
 
         if ( CurrentState )
         {
