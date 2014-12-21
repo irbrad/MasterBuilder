@@ -35,11 +35,8 @@ CitizenSocket::CitizenSocket()
 
 CitizenSocket::~CitizenSocket()
 {
-#if DEBUG
-    fprintf( stderr, "~CitizenSocket dtor\n" );
-#endif
-
     shutdown( Socket, SHUT_RDWR );
+    dispatch_source_cancel( SocketSource );
 }
 
 void CitizenSocket::InitializeSocket()
