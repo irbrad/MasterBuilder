@@ -9,11 +9,21 @@
 #ifndef __MasterBuilder__MasterSocket__
 #define __MasterBuilder__MasterSocket__
 
+#ifdef __APPLE_
+	#define USE_GCD		1
+#else
+	#define USE_GCD		0
+#endif
+
+
 #include <google/protobuf/message.h>
-#include <dispatch/dispatch.h>
+#if USE_GCD
+	#include <dispatch/dispatch.h>
+#endif // __APPLE__
 #include <thread>
 #include <deque>
 #include <unordered_map>
+#include <mutex>
 
 /**
  *  This is our master socket, or the thing we're listening to all of the
@@ -53,8 +63,10 @@ public:
 
 private:
     int32_t Socket;
+#if USE_GCD
     dispatch_source_t SocketSource, TimerSource;
     dispatch_queue_t HighPriorityQueue;
+#endif // USE_GCD
 
     std::mutex MessageMutex, SocketMutex;
     std::deque< class MsgBase* > PendingMessages;

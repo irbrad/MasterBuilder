@@ -9,11 +9,21 @@
 #ifndef __MasterBuilder__CitizenSocket__
 #define __MasterBuilder__CitizenSocket__
 
+#ifdef __APPLE__
+	#define	USE_GCD		1
+#else
+	#define USE_GCD		0
+#endif // __APPLE__
+
+
 #include <stdint.h>
 #include <google/protobuf/message.h>
-#include <dispatch/dispatch.h>
+#if USE_GCD
+	#include <dispatch/dispatch.h>
+#endif // USE_GCD
 #include <thread>
 #include <deque>
+#include <mutex>
 
 class CitizenSocket
 {
@@ -53,8 +63,10 @@ public:
 private:
     int32_t Socket;
 
+#if USE_GCD
     dispatch_queue_t HighPriorityQueue;
     dispatch_source_t SocketSource;
+#endif // USE_GCD
 
     std::mutex Mutex;
     std::deque< class MsgBase* > PendingMessages;

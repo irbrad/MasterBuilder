@@ -23,7 +23,9 @@
 
 MasterSocket::MasterSocket()
 {
+#if USE_GCD
     HighPriorityQueue = dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 );
+#endif // USE_GCD
 
     InitializeSocket();
     InitializeTick();
@@ -33,8 +35,10 @@ MasterSocket::~MasterSocket()
 {
     close( Socket );
 
+#if USE_GCD
     dispatch_source_cancel( SocketSource );
     dispatch_source_cancel( TimerSource );
+#endif // USE_GCD
 }
 
 void MasterSocket::InitializeSocket()
@@ -66,7 +70,9 @@ void MasterSocket::InitializeSocket()
     struct sockaddr_in sin;
     memset( &sin, 0, sizeof( sin ) );
 
+#ifdef SIN_LEN	// this field is BSD-specific
     sin.sin_len = sizeof( sin );
+#endif // SIN_LEN
     sin.sin_family = AF_INET;
     sin.sin_port = htons( 1337 );
     sin.sin_addr.s_addr = INADDR_ANY;
@@ -85,6 +91,7 @@ void MasterSocket::InitializeSocket()
         return;
     }
 
+#if USE_GCD
     SocketSource =
         dispatch_source_create( DISPATCH_SOURCE_TYPE_READ, Socket, 0, HighPriorityQueue );
 
@@ -139,10 +146,16 @@ void MasterSocket::InitializeSocket()
     } );
 
     dispatch_resume( SocketSource );
+#else
+
+	// TODO: implement
+
+#endif // USE_GCD
 }
 
 void MasterSocket::InitializeTick()
 {
+#if USE_GCD
     TimerSource = dispatch_source_create( DISPATCH_SOURCE_TYPE_TIMER, 0, 0, HighPriorityQueue );
 
     if ( TimerSource )
@@ -191,6 +204,12 @@ void MasterSocket::InitializeTick()
 
         dispatch_resume( TimerSource );
     }
+
+#else
+
+	// TODO: implement
+
+#endif // USE_GCD
 }
 
 size_t MasterSocket::PendingMsgCount()
