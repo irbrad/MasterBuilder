@@ -29,7 +29,9 @@
 
 CitizenSocket::CitizenSocket()
 {
+#if USE_GCD
     HighPriorityQueue = dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 );
+#endif // USE_GCD
 
     InitializeSocket();
 }
@@ -37,7 +39,9 @@ CitizenSocket::CitizenSocket()
 CitizenSocket::~CitizenSocket()
 {
     shutdown( Socket, SHUT_RDWR );
+#if USE_GCD
     dispatch_source_cancel( SocketSource );
+#endif // USE_GCD
 }
 
 void CitizenSocket::InitializeSocket()
@@ -80,6 +84,7 @@ void CitizenSocket::InitializeSocket()
         return;
     }
 
+#if USE_GCD
     SocketSource =
         dispatch_source_create( DISPATCH_SOURCE_TYPE_READ, Socket, 0, HighPriorityQueue );
 
@@ -106,6 +111,12 @@ void CitizenSocket::InitializeSocket()
     } );
 
     dispatch_resume( SocketSource );
+#else
+
+	// TODO: implement
+
+#endif // USE_GCD
+
 }
 
 void CitizenSocket::SendMsg( google::protobuf::Message* msg, uint32_t msgType )

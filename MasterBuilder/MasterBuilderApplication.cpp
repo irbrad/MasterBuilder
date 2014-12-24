@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Pawkette. All rights reserved.
 //
 
+#include <unistd.h>	// usleep()
 #include "MasterBuilderApplication.h"
 
 #include "ApplicationState.h"
